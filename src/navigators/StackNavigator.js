@@ -6,6 +6,14 @@ import RegisterScreen from '../screens/RegisterScreen';
 import { UserTab } from './userTab';
 import HomeScreen from '../screens/HomeScreen';
 import Splash from '../screens/Splash';
+import UserQr from '../screens/UserQr';
+import Scanner from '../screens/Scanner';
+import UploadImageScreen from '../screens/UploadImageScreen';
+import Profile from '../screens/Profile';
+import UserAdmin from '../screens/UsersAdmin';
+import UserCount from '../screens/UserCount';
+import { TabNavigator } from './tabNavigator';
+import RecieveImages from '../screens/recieveImages';
 
 
 
@@ -19,6 +27,14 @@ class Stack extends Component {
           <MyStack.Screen name="RegisterScreen" component={RegisterScreen} />
           <MyStack.Screen name="UserTab" component={UserTab} />
           <MyStack.Screen name="HomeScreen" component={HomeScreen} />
+          <MyStack.Screen name="UserQr" component={UserQr} />
+          <MyStack.Screen name="Scanner" component={Scanner} />
+          <MyStack.Screen name="UploadImageScreen" component={UploadImageScreen} />
+          <MyStack.Screen name="Profile" component={Profile} />
+          <MyStack.Screen name="UserAdmin" component={UserAdmin} />
+          <MyStack.Screen name="UserCount" component={UserCount} />
+          <MyStack.Screen name="TabNavigator" component={TabNavigator} />
+          <MyStack.Screen name="RecieveImages" component={RecieveImages} />
         </MyStack.Navigator>
     )
   }

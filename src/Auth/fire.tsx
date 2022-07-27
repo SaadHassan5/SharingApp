@@ -204,7 +204,7 @@ export async function uploadImageToStorage(path, imageName) {
     console.log('Image uploaded to the bucket!', res);
   }).catch((e) => console.log('uploading image error => ', e));
 }
-export async function uploadFile(file, fileName?,doc) {
+export async function uploadFile(file, fileName?,doc?) {
 console.log("UPLOAAAAAAAAAD");
 
   return new Promise(async (resolve, reject) => {

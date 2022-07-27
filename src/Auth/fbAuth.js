@@ -2,8 +2,17 @@ import { LoginManager, AccessToken } from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
 import { saveData, uploadFile } from './fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+Date.prototype.getWeek = function () {
+    var onejan = new Date(this.getFullYear(), 0, 1);
+    var today = new Date(this.getFullYear(), this.getMonth(), this.getDate());
+    var dayOfYear = ((today - onejan + 86400000) / 86400000);
+    return Math.ceil(dayOfYear / 7)
+};
 export const onFacebookButtonPress = async (props) => {
     // Attempt login with permissions
+    const today = new Date();
+    const currentWeekNumber = today.getWeek();
     LoginManager.logOut();
     const result = await LoginManager.logInWithPermissions([
         'public_profile',
@@ -26,23 +35,23 @@ export const onFacebookButtonPress = async (props) => {
     // Sign-in the user with the credential
     const res = await auth().signInWithCredential(facebookCredential)
     console.log("res", res);
-    if(res?.additionalUserInfo?.isNewUser){
+    if (res?.additionalUserInfo?.isNewUser) {
         await saveData("Users", res?.additionalUserInfo?.profile?.email, {
             email: res?.additionalUserInfo?.profile?.email,
             name: res?.additionalUserInfo?.profile?.name,
             id: res?.additionalUserInfo?.profile?.id,
             profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
             subscribed: [],
-            imgs:[],
-            history:[],
-            pin:[],
+            imgs: [],
+            history: [],
+            pin: [],
             month: new Date().getMonth(),
             date: new Date().getDate(),
             year: new Date().getFullYear(),
             week: currentWeekNumber,
         })
     }
-    else{
+    else {
         await saveData("Users", res?.additionalUserInfo?.profile?.email, {
             email: res?.additionalUserInfo?.profile?.email,
             name: res?.additionalUserInfo?.profile?.name,

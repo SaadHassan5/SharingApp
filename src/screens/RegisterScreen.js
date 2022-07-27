@@ -117,8 +117,8 @@ export default function RegisterScreen(props) {
 
             <SubmitButton title="Register" />
             <TouchableOpacity onPress={() => { setActive(true); onFacebookButtonPress(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
-              <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray }}>Register with </Text>
-              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={25} />
+              <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray,fontSize:20 }}>Register with </Text>
+              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={30} />
             </TouchableOpacity>
           </AppForm>
         </View>

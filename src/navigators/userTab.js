@@ -11,14 +11,18 @@ import { HP, palette, WP } from '../assets/config';
 import IconScanner from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from '../screens/HomeScreen';
 import fontFamily from '../assets/config/fontFamily';
+import LoginScreen from '../screens/LoginScreen';
+import UserQr from '../screens/UserQr';
+import Profile from '../screens/Profile';
+import RecieveImages from '../screens/recieveImages';
 
-// const ScannerButton = (prop) => {
-//   return (
-//     <TouchableOpacity onPress={()=>{prop.navigation?.navigate('QRR')}} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
-//       <IconScanner name='qr-code-scanner' color={colors.primary} size={30} />
-//     </TouchableOpacity>
-//   )
-// }
+const ScannerButton = (prop) => {
+  return (
+    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
+      <IconMat name='qr-code-scanner' color={colors.primary} size={30} />
+    </TouchableOpacity>
+  )
+}
 const Tab = createBottomTabNavigator();
 
 export function UserTab(props) {
@@ -56,7 +60,26 @@ export function UserTab(props) {
           )
         }}
       />
-      <Tab.Screen name="Profile" component={HomeScreen}
+      {/* <Tab.Screen name="UserQr" component={UserQr} options={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarButton: () => (<ScannerButton {...props} />),
+      }} /> */}
+      <Tab.Screen name="UserQr" component={UserQr}
+        options={{
+          // tabBarLabel: true,
+          // title: 'Group',
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
+            </View>
+          )
+        }}
+      />
+      <Tab.Screen name="Profile" component={Profile}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -66,6 +89,20 @@ export function UserTab(props) {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <IconEntypo name={'user'} size={20} color={focused ? "#fff" : "grey"} />
               <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Profile</Text>
+            </View>
+          )
+        }}
+      />
+      <Tab.Screen name="Revieve" component={RecieveImages}
+        options={{
+          // tabBarLabel: true,
+          // title: 'Group',
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <IconEntypo name={'download'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Recieve</Text>
             </View>
           )
         }}

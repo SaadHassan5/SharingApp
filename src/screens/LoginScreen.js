@@ -63,7 +63,7 @@ export default function LoginScreen(props) {
               if(adm.length>0){
                   await AsyncStorage.setItem('User', email);
                   await AsyncStorage.setItem('Admin', email);
-                  // props.navigation.replace('TabNavigator')
+                  props.navigation.replace('TabNavigator')
               }
               else
               toastPrompt("Wrong Credentials")
@@ -80,24 +80,11 @@ export default function LoginScreen(props) {
               <Text style={{ ...styles.label }}>Login as Admin</Text>
               <Checkbox status={check == "check" ? 'checked' : 'unchecked'} color={colors.primary} uncheckedColor={'red'} />
             </TouchableOpacity>
-            <View style={styles.userCheckMeta}>
-              <View style={styles.checkboxContainer}>
-                {/* <Checkbox
-                  disabled={false}
-                  value={toggleCheckBox}
-                  onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                /> */}
-
-                <AppText style={styles.label}>Remeber Me ?</AppText>
-              </View>
-              <TouchableOpacity onPress={() => props.navigation.navigate("ForgotPassword")} >
-                <AppText style={styles.forgotPass}>Forgot Password ? </AppText>
-              </TouchableOpacity>
-            </View>
+           
             <SubmitButton title="Login" style={{ marginTop: spacing[4] }} />
             <TouchableOpacity onPress={async()=>{setActive(true);await onFacebookButtonPress(props);setActive(false)}} style={{flexDirection:'row',alignItems:'center',paddingHorizontal:WP(5),alignSelf:'center',paddingVertical:HP(2)}}>
-              <Text style={{fontFamily:fontFamily.bold,color:palette.blackGray}}>Login with </Text>
-              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={25}/>
+              <Text style={{fontFamily:fontFamily.bold,color:palette.blackGray,fontSize:20}}>Login with </Text>
+              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={30}/>
             </TouchableOpacity>
           </AppForm>
         </View>
