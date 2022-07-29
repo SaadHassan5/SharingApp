@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Text,Platform,ToastAndroid } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Text,Platform,ToastAndroid, SafeAreaView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Yup from "yup";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -84,7 +84,7 @@ export default function RegisterScreen(props) {
     })
   }
   return (
-    <>
+    <SafeAreaView style={{flex:1,backgroundColor:"#fff"}}>
       <Header title="Register" onPress={() => props.navigation.goBack()} />
 
       <KeyboardAwareScrollView
@@ -96,8 +96,12 @@ export default function RegisterScreen(props) {
         showsHorizontalScrollIndicator={false}
       >
         <View style={styles.logoContainer}>
-          <Image source={require("../assets/images/logo/logo.png")} />
+        <Image style={{width:WP(70),height:WP(20)}} source={require("../assets/images/logo/logo.png")} />
         </View>
+        <TouchableOpacity onPress={() => { setActive(true); onFacebookButtonPress(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
+              <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray,fontSize:24 }}>Register with </Text>
+              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={35} />
+            </TouchableOpacity>
         <View style={styles.formContainer}>
           <AppForm
             initialValues={{ name: "", email: "", password: "" }}
@@ -116,18 +120,14 @@ export default function RegisterScreen(props) {
             <AppButton onPress={() => onBrowse()} style={{ marginTop: 10, marginBottom: 10, backgroundColor: 'transparent', borderWidth: 2, borderColor: colors.gray }} textColor={true} title="Add Profile Image" />
 
             <SubmitButton title="Register" />
-            <TouchableOpacity onPress={() => { setActive(true); onFacebookButtonPress(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
-              <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray,fontSize:20 }}>Register with </Text>
-              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={30} />
-            </TouchableOpacity>
           </AppForm>
         </View>
 
 
         <View style={styles.signUpLinkContainer}>
           <View style={styles.signUpTextContainer}>
-            <AppText preset="default">All Ready have an account?</AppText>
-            <TouchableOpacity onPress={() => props.navigation.navigate("Login")}>
+            <AppText preset="default">Already have an account?</AppText>
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
               <AppText preset="bold" style={styles.link}>Login</AppText>
             </TouchableOpacity>
           </View>
@@ -138,7 +138,7 @@ export default function RegisterScreen(props) {
           </View>
         }
       </KeyboardAwareScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 

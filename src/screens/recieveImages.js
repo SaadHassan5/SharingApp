@@ -198,15 +198,12 @@ function RecieveImages(props) {
                                         <View>
                                             <View style={{ ...GlobalStyles.row, width: '100%' }}>
                                                 <Text style={{ ...Styles.titleTxt, paddingVertical: HP(3) }}>{item?.heading}</Text>
-                                                <View style={{ ...GlobalStyles.row, marginLeft: WP(10) }}>
+                                                <View style={{ ...GlobalStyles.row, marginLeft: WP(10), }}>
                                                     <TouchableOpacity onPress={() => { onApproveAll(item) }}>
                                                         <Text style={{ ...Styles.cancelTxt, color: "green" }}>Approve All</Text>
                                                     </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => { onRejectAll(item) }} style={{ marginLeft: WP(10) }}>
                                                         <Text style={{ ...Styles.cancelTxt, color: "red" }}>Reject All</Text>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity onPress={() => { onBrowse(item) }} style={{ marginLeft: WP(5) }}>
-                                                        <Text style={{ ...Styles.cancelTxt, color: colors.primary }}>Add pics</Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>

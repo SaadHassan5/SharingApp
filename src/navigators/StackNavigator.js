@@ -14,6 +14,7 @@ import UserAdmin from '../screens/UsersAdmin';
 import UserCount from '../screens/UserCount';
 import { TabNavigator } from './tabNavigator';
 import RecieveImages from '../screens/recieveImages';
+import AllPhotos from '../screens/AllPhotos';
 
 
 
@@ -35,6 +36,7 @@ class Stack extends Component {
           <MyStack.Screen name="UserCount" component={UserCount} />
           <MyStack.Screen name="TabNavigator" component={TabNavigator} />
           <MyStack.Screen name="RecieveImages" component={RecieveImages} />
+          <MyStack.Screen name="AllPhotos" component={AllPhotos} />
         </MyStack.Navigator>
     )
   }

@@ -14,9 +14,8 @@ import { HP, WP } from '../assets/config';
 import ShareModal from '../components/shareModal';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { colors } from '../theme';
-import ArrowRight from '../svg/ArrowRight';
 
-const HomeScreen = (props) => {
+const AllPhotos = (props) => {
     const [user, setUser] = useState({})
     const [albums, setAlbums] = useState([])
     const [albumsR, setAlbumsR] = useState([])
@@ -24,79 +23,37 @@ const HomeScreen = (props) => {
     const [mod, setMod] = useState(false)
     const [albumName, setAlbumName] = useState('')
     useEffect(() => {
-        setTimeout(() => {
-            setMod(true)
-        }, 1000);
-        getUser();
-        // getCreatedAlbums();
-        getRecievedAlbums()
+        console.log(props.route);
     }, [])
-    const getRecievedAlbums = async () => {
-        const res = await filterCollection('Recieved',"Public",true,"view","feature");
-        console.log(res);
-        setAlbumsR(res)
-    }
-    const onShare = async () => {
-        let url = 'whatsapp://send?text=' + 'https://sharingapp.page.link/moonsot';
-        Linking.openURL(url)
-    }
-    const getCreatedAlbums = async () => {
-        const value = await AsyncStorage.getItem("User")
-        const res = await filterCollectionSingle("Created", value.trim(), "owner")
-        console.log("Albums", res, value);
-        setAlbums(res);
-    }
+
+
     const getUser = async () => {
         const value = await AsyncStorage.getItem("User")
         const res = await getData("Users", value);
         props.getUser(res)
     }
-    const onSave = async () => {
-        const value = await AsyncStorage.getItem("User")
-        await saveData("Created", '', {
-            owner: value,
-            albumName: albumName,
-            imgs: [],
-        })
-        setAdd(false);
-        // getCreatedAlbums();
-    }
     return (
         <SafeAreaView style={{ ...GlobalStyles.container, backgroundColor: '#fff' }}>
-            <Header title={"Home"} goBack={false} />
+            <Header title={props.route.params?.albumName} goBack={()=>{props.navigation.goBack()}} />
             <ScrollView
                 style={{ flexGrow: 1, backgroundColor: "#fff" }}
                 contentContainerStyle={{ paddingVertical: HP(2), paddingBottom: HP(10), paddingHorizontal: WP(5) }}
                 showsVerticalScrollIndicator={false}
             >
+             
                         <View style={{}}>
-                            <FlatList
-                                numColumns={1}
-                                data={albumsR}
-                                keyExtractor={item => item.id}
-                                renderItem={({ item }) =>
-                                <View style={{marginTop:HP(2)}}>
-                                        <TouchableOpacity onPress={()=>{props.navigation.navigate("AllPhotos",item)}} style={{ ...GlobalStyles.row, justifyContent: 'space-between',paddingVertical:HP(.5) }}>
-                                            <Text style={{ ...Styles.titleTxt, }}>{item?.albumName}</Text>
-                                            <Text style={{ ...Styles.titleTxt, color: 'red', fontSize: 12 }}>{item?.view}</Text>
-                                            <ArrowRight />
-                                        </TouchableOpacity>
                                         <FlatList
-                                            // numColumns={1}
-                                            horizontal
-                                            data={item?.imgs}
+                                            numColumns={2}
+                                            // horizontal
+                                            data={props.route.params.imgs}
                                             // showsHorizontalScrollIndicator={false}
                                             keyExtractor={item => item.id}
                                             renderItem={({ item }) =>
-                                                <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                                                <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5),marginTop:HP(.5) }} />
                                             } />
-
-                                    </View>
-                                }
-                            />
                         </View>
+                        
             </ScrollView>
-            <ShareModal mod={mod} onShare={onShare} onPress={() => { setMod(false) }} />
         </SafeAreaView>
     )
 }
@@ -129,4 +86,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 // export default Home
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AllPhotos);

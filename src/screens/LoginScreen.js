@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import * as Yup from 'yup';
-import { ActivityIndicator,View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { ActivityIndicator,View, Image, StyleSheet, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Header from "../components/Header";
 import AppText from "../components/AppText";
@@ -32,7 +32,7 @@ export default function LoginScreen(props) {
   const [check, setCheck] = useState("uncheck")
 
   return (
-    <>
+    <SafeAreaView style={{flex:1,backgroundColor:"#fff"}}>
       <Header title="Login" onPress={() => { }} />
 
       <KeyboardAwareScrollView
@@ -45,8 +45,12 @@ export default function LoginScreen(props) {
       >
 
         <View style={styles.logoContainer}>
-          <Image source={require("../assets/images/logo/logo.png")} />
+          <Image style={{width:WP(70),height:WP(20)}} source={require("../assets/images/logo/logo.png")} />
         </View>
+        <TouchableOpacity onPress={async()=>{setActive(true);await onFacebookButtonPress(props);setActive(false)}} style={{flexDirection:'row',alignItems:'center',paddingHorizontal:WP(5),alignSelf:'center',paddingVertical:HP(2)}}>
+              <Text style={{fontFamily:fontFamily.bold,color:palette.blackGray,fontSize:24}}>Login with </Text>
+              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={35}/>
+            </TouchableOpacity>
         <View style={styles.formContainer}>
 
           <AppForm
@@ -82,10 +86,7 @@ export default function LoginScreen(props) {
             </TouchableOpacity>
            
             <SubmitButton title="Login" style={{ marginTop: spacing[4] }} />
-            <TouchableOpacity onPress={async()=>{setActive(true);await onFacebookButtonPress(props);setActive(false)}} style={{flexDirection:'row',alignItems:'center',paddingHorizontal:WP(5),alignSelf:'center',paddingVertical:HP(2)}}>
-              <Text style={{fontFamily:fontFamily.bold,color:palette.blackGray,fontSize:20}}>Login with </Text>
-              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={30}/>
-            </TouchableOpacity>
+           
           </AppForm>
         </View>
         <View style={styles.signUpLinkContainer}>
@@ -101,7 +102,7 @@ export default function LoginScreen(props) {
             }
       </KeyboardAwareScrollView>
 
-    </>
+    </SafeAreaView>
   );
 }
 

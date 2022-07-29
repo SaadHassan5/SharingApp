@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "802060354200",
+    "firebase_url": "https://sharingapp-dbf7e-default-rtdb.firebaseio.com",
     "project_id": "sharingapp-dbf7e",
     "storage_bucket": "sharingapp-dbf7e.appspot.com"
   },

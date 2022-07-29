@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Share, View, StyleSheet, Image, TouchableOpacity, Text, Linking ,ScrollView, FlatList} from 'react-native';
+import { Share, View, StyleSheet, Image, TouchableOpacity, Text, Linking ,ScrollView, FlatList, SafeAreaView} from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
@@ -53,7 +53,7 @@ function Profile(props) {
     })
   }
   return (
-    <>
+    <SafeAreaView style={{backgroundColor:"#fff",flex:1}}>
       <Header title="Profile" goBack={false} style={{ backgroundColor: colors.light }} logout={() => { handleSignOut() }} />
       <Screen style={styles.container}>
         <ScrollView
@@ -61,7 +61,7 @@ function Profile(props) {
           contentContainerStyle={{ paddingBottom: HP(20), paddingTop: HP(2) }}
         >
           <View style={styles.userProfileBox}>
-            <Image source={{ uri: props.user?.profileUri }} style={{ width: WP(25), height: WP(25) }} />
+            <Image source={{ uri: props.user?.profileUri }} style={{ width: WP(25), height: WP(25),borderRadius:WP(13)}} />
             <TouchableOpacity
             >
             </TouchableOpacity>
@@ -75,7 +75,7 @@ function Profile(props) {
                         data={allAlbums}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
-                            <View>
+                            <TouchableOpacity onPress={()=>{props.navigation.navigate("AllPhotos",item)}}>
                                 <Text style={{ ...styles.titleTxt, paddingVertical: HP(3) }}>{item?.albumName}</Text>
                                 <FlatList
                                     // numColumns={1}
@@ -87,7 +87,7 @@ function Profile(props) {
                                         <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
                                     } />
 
-                            </View>
+                            </TouchableOpacity>
                         }
                     />
           {/* <ScrollView showsHorizontalScrollIndicator={false} horizontal>
@@ -108,7 +108,7 @@ function Profile(props) {
           </ScrollView> */}
         </ScrollView>
       </Screen>
-    </>
+    </SafeAreaView>
   )
 }
 

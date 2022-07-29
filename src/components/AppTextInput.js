@@ -1,5 +1,6 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
+import { palette } from "../assets/config";
 import { colors } from "../theme/colors";
 
 export default function AppTextInput({
@@ -16,7 +17,7 @@ export default function AppTextInput({
   return (
     <View style={[styles.container, style,penIcon && {flexDirection:'row',justifyContent:'space-between',alignItems:'center'},icon && {flexDirection:'row',alignItems:'center'}]}>
       {icon && icon}
-      <TextInput editable={editable} keyboardType={keyboard} value={value} onChangeText={onChange} placeholder={placeholderText} {...otherProps} />
+      <TextInput editable={editable} keyboardType={keyboard} value={value} onChangeText={onChange} placeholderTextColor={palette.labelGray} style={{color:'black'}} placeholder={placeholderText} {...otherProps} />
       {penIcon && penIcon}
     </View>
     
