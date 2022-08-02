@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Share, View, StyleSheet, Image, TouchableOpacity, Text, Linking ,ScrollView, FlatList, SafeAreaView, Pressable} from 'react-native';
+import { Share, View, StyleSheet, Image, TouchableOpacity, Text, Linking ,ScrollView, FlatList, SafeAreaView} from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
@@ -16,7 +16,7 @@ import AlertService from '../Services/alertService';
 import { filterCollectionSingle } from '../Auth/fire';
 // import AlertService from '../Services/alertService';
 
-function Profile(props) {
+function FriendProfile(props) {
   const [email, setEmail] = useState(props?.user?.email)
   const dispatch = useDispatch();
   const user = useState({});
@@ -25,57 +25,35 @@ function Profile(props) {
   const [allAlbums, setAllAlbums] = useState([])
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-      recieveAlbums()
     });
     return unsubscribe;
   }, [props.navigation])
 
- async function recieveAlbums(){
-  const value=await AsyncStorage.getItem("User")
-  const res =await filterCollectionSingle("Recieved",value,"owner");
-  setAllAlbums(res);
- }
-  const handleSignOut = async () => {
-    AlertService.confirm("Are you sure you want to Logout?").then(async (res) => {
-      if (res) {
-        await AsyncStorage.removeItem("User")
-        await AsyncStorage.removeItem("Admin")
-        await AsyncStorage.removeItem("id");
-        props.navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              { name: 'Splash' },
-            ]
-          })
-        );
-      }
-    })
-  }
+
   return (
     <SafeAreaView style={{backgroundColor:"#fff",flex:1}}>
-      <Header title="Profile" goBack={false} style={{ backgroundColor: colors.light }} logout={() => { handleSignOut() }} />
+      <Header title={props.route?.params?.name} goBack={()=>{props.navigation?.goBack()}} style={{ backgroundColor: colors.light }} />
       <Screen style={styles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: HP(20), paddingTop: HP(2) }}
         >
           <View style={styles.userProfileBox}>
-            <Image source={{ uri: props.user?.profileUri }} style={{ width: WP(25), height: WP(25),borderRadius:WP(13)}} />
+            <Image source={{ uri: props.route?.params?.profileUri }} style={{ width: WP(25), height: WP(25),borderRadius:WP(13)}} />
             <TouchableOpacity
             >
             </TouchableOpacity>
             <View style={styles.userInfo}>
-              <AppText style={styles.userName} preset='h4'>{props.user.name}</AppText>
-              <AppText style={styles.userEmail}>{props.user.email}</AppText>
+              <AppText style={styles.userName} preset='h4'>{props.route?.params?.name}</AppText>
+              <AppText style={styles.userEmail}>{props.route?.params?.email}</AppText>
             </View>
           </View>
           <FlatList
                         numColumns={1}
-                        data={allAlbums}
+                        data={props.route.params?.albums}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
-                            <Pressable onPress={()=>{props.navigation.navigate("AllPhotos",item)}}>
+                            <TouchableOpacity onPress={()=>{props.navigation.navigate("AllPhotos",item)}}>
                                 <Text style={{ ...styles.titleTxt, paddingVertical: HP(3) }}>{item?.albumName}</Text>
                                 <FlatList
                                     // numColumns={1}
@@ -84,28 +62,13 @@ function Profile(props) {
                                     showsHorizontalScrollIndicator={false}
                                     keyExtractor={item => item.id}
                                     renderItem={({ item }) =>
-                                        <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                                        <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5),borderRadius:WP(2) }} />
                                     } />
 
-                            </Pressable>
+                            </TouchableOpacity>
                         }
                     />
-          {/* <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
-              <TouchableOpacity onPress={() => { setOpt("posts") }} style={{ ...styles.optView, backgroundColor: opt == 'posts' ? colors.primary : colors.lightGray }}>
-                <Text style={{ ...styles.optTxt }}>Posts Made</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setOpt('image') }} style={{ ...styles.optView, backgroundColor: opt == 'image' ? colors.primary : colors.lightGray }}>
-                <Text style={{ ...styles.optTxt }}>Images Uploaded</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setOpt('qr') }} style={{ ...styles.optView, backgroundColor: opt == 'qr' ? colors.primary : colors.lightGray }}>
-                <Text style={{ ...styles.optTxt }}>QR Code</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setOpt('reminders') }} style={{ ...styles.optView, backgroundColor: opt == 'reminders' ? colors.primary : colors.lightGray }}>
-                <Text style={{ ...styles.optTxt }}>Reminders</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView> */}
+
         </ScrollView>
       </Screen>
     </SafeAreaView>
@@ -129,7 +92,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 // export default Home
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(FriendProfile);
 const styles = StyleSheet.create({
   cancelTxt: {
     fontFamily: fontFamily.bold,

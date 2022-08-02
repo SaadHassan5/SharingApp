@@ -17,15 +17,14 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { filterCollection, saveData, uploadMultiFile } from '../Auth/fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertService from '../Services/alertService';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 const UserQr = (props) => {
     const [active, setActive] = useState(false)
     const [imgs, setImgs] = useState([])
     const [open, setOpen] = useState(false)
     const [opt, setOpt] = useState('Login As')
-    const [heading, setHeading] = useState('')
+    const [heading, setHeading] = useState('NewAlbum')
     const [check, setCheck] = useState("Public")
-    const [email, setEmail] = useState(props?.user?.email + "/NewAlbum");
+    const [email, setEmail] = useState(props?.user?.email + "/"+heading);
     const loginAs = [
         { key: 'User' },
         { key: 'Police' },
@@ -40,23 +39,7 @@ const UserQr = (props) => {
     }
     useEffect(()=>{
     },[])
-    async function buildLink() {
-        console.log("LINK");
-        const link = await dynamicLinks().buildLink({
-          link: 'https://sharingapp.page.link/'+ replaceFunc(email, " ", "-") + '/',
-          // domainUriPrefix is created in your Firebase console
-          domainUriPrefix: 'https://sharingapp.page.link',
-          android:{
-            fallbackUrl:"https://www.google.com/",
-            packageName:"com.sharingapp",
-          }
-          // optional setup which updates Firebase analytics campaign
-          // "banner". This also needs setting up before hand
-          
-        });
-      
-        return link;
-      }
+
     const onShare = async () => {
 
         try {
@@ -78,7 +61,6 @@ const UserQr = (props) => {
         }
     }
     const onShareWhatsapp = async() => {
-        await buildLink();
         // let url = 'whatsapp://send?text=' + "https://sharingapp.page.link/moonshot/";
         let url = 'whatsapp://send?text=' + 'https://sharingapp.page.link/' + replaceFunc(email, " ", "-") + '/';
         Linking.openURL(url)
@@ -155,7 +137,7 @@ const UserQr = (props) => {
             <Header title="Q R" style={{}} goBack={() => { props.navigation.goBack() }} />
             <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ width: "70%", marginVertical: HP(5) }}>
-                    <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e + '/' + check) }} />
+                    <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} />
                     <View style={{ ...GlobalStyles.row, justifyContent: 'space-around' }}>
                         <TouchableOpacity onPress={() => { setCheck('Public') }} style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
                             <Text style={{ ...styles.emailTxt, color: palette.labelGray }}>Public</Text>

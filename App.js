@@ -12,48 +12,51 @@ const App = () => {
   useEffect(() => {
     getLink();
     dynamicLinks()
-    .getInitialLink()
-    .then(async(link) => {
-      console.log("BACK DYNAMIC");
-      let sp = link?.url?.split('/')
-      const value = await AsyncStorage.getItem("User")
-      if (value != null) {
-        if(sp.length==6)
-        nav?.current?.navigate("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
-      }
-      else
-        nav?.current?.navigate("LoginScreen")
-      //   // listener(url);
-    });
+      .getInitialLink()
+      .then(async (link) => {
+        console.log("BACK DYNAMIC");
+        let sp = link?.url?.split('/')
+        const value = await AsyncStorage.getItem("User")
+        if (value != null) {
+          if (sp?.length > 5)
+            nav?.current?.navigate("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
+        }
+        else {
+          await AsyncStorage.setItem("Link", link?.url)
+          nav?.current?.navigate("LoginScreen")
+        }
+        //   // listener(url);
+      });
     const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
     // When the component is unmounted, remove the listener
     return () => unsubscribe();
   }, [])
-  const handleDynamicLink = async(link) => {
+  const handleDynamicLink = async (link) => {
     // Handle dynamic link inside your own application
     console.log("DYNAMIC", link.url);
     let sp = link?.url?.split('/')
     const value = await AsyncStorage.getItem("User")
-      if (value != null) {
-        if(sp.length==6)
+    if (value != null) {
+      if (sp?.length > 5)
         nav?.current?.navigate("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
-      }
-      else
-        nav?.current?.navigate("LoginScreen")
-      //   // listener(url);
+    }
+    else
+      nav?.current?.navigate("LoginScreen")
+    //   // listener(url);
   };
   async function getLink() {
     const linkingSubscription = Linking.addEventListener('url', async ({ url }) => {
       let sp = url.split('/')
-      console.log(sp.length);
-      console.log("LinkedUrlApp", url, sp[sp?.length - 4], sp[sp?.length - 3], sp[sp?.length - 2]);
+      console.log("LinkedUrlApp", url, sp?.length);
       const value = await AsyncStorage.getItem("User")
       if (value != null) {
-        if(sp.length==6)
-        nav?.current?.navigate("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
+        if (sp?.length > 5)
+          nav?.current?.navigate("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
       }
-      else
+      else {
+        await AsyncStorage.setItem("Link",url)
         nav?.current?.navigate("LoginScreen")
+      }
       //   // listener(url);
     });
     return linkingSubscription;

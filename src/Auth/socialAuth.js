@@ -59,7 +59,7 @@ const Signup = async (email, password, name, props) => {
 }
 const Signin = async (email, password, props) => {
   // let dat=new Date().toDateString().toString().split(' ')
- 
+ const link= await AsyncStorage.getItem("Link");
   await auth()
     .signInWithEmailAndPassword(email, password)
     .then(async (res) => {
@@ -70,6 +70,12 @@ const Signin = async (email, password, props) => {
       await saveData("Users", email, {
         email: email,
       })
+      if(link!=null){
+        console.log(link);
+        let sp = link.split('/')
+        props.navigation?.replace("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
+      }
+      else
       props.navigation.replace('UserTab')
       // props.navigation.replace('Home')
       // props.navigation.replace('TabNavigator');

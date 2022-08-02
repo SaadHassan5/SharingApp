@@ -11,6 +11,7 @@ const Splash = (props) => {
     }, 500);
   }, [])
   const checkUser = async () => {
+    await AsyncStorage.removeItem("Link")
     const adm = await AsyncStorage.getItem("Admin")
     if (adm != null) {
       props.navigation.replace('TabNavigator');

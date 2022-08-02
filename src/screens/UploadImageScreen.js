@@ -18,31 +18,54 @@ const UploadImageScreen = (props) => {
   useEffect(() => {
     console.log(props.route);
     getUser();
+    updateHistory();
   }, [])
+  async function updateHistory(){
+    const value = await AsyncStorage.getItem("User")
+    const res = await getData("Users", value);
+    const resFriend = await getData("Users", props.route.params?.email);
+    console.log("USER",res);
+    console.log("FRIEND",resFriend);
+    let chk = res?.history.find(e => {return e?.email == props.route.params?.email})
+    let chkFriend = resFriend?.history.find(e => {return e?.email == value})
+    console.log(!chk,!chkFriend);
+    if(!chk){
+      let temp=[...res?.history]; temp.push({email:resFriend?.email,profileUri:resFriend?.profileUri,name:resFriend?.name})
+      await saveData("Users", value, {
+        history:temp
+      })
+    }
+    if(!chkFriend){
+      let temp1=[...resFriend?.history]; temp1.push({email:res?.email,profileUri:res?.profileUri,name:res?.name})
+      await saveData("Users", resFriend?.email, {
+        history:temp1
+      })
+    }
+  }
   async function onSave(res) {
     const value = await AsyncStorage.getItem("User")
     setActive(true)
     let upImgs = await uploadMultiFile(imgs, value)
     setTimeout(async () => {
-        if (upImgs.length > 0) {
+      if (upImgs.length > 0) {
 
         console.log("UPImg", upImgs);
         await saveData("Albums", '', {
           imgs: upImgs,
-          owner:props?.route.params?.email,
-          heading:props?.route.params?.heading,
-          sender:value,
-          senderImg:props?.user?.profileUri,
-          view:props?.route.params?.view,
+          owner: props?.route.params?.email,
+          heading: props?.route.params?.heading,
+          sender: value,
+          senderImg: props?.user?.profileUri,
+          view: props?.route.params?.view,
           approve: false,
           reject: false,
         })
         props.navigation.goBack();
         setActive(false)
       }
-        else
+      else
         setActive(false)
-      }, 3000 * imgs?.length);
+    }, 3000 * imgs?.length);
   }
   async function onBrowse(res) {
     const options = {
@@ -65,9 +88,17 @@ const UploadImageScreen = (props) => {
     })
   }
   const getUser = async () => {
+    await AsyncStorage.removeItem("Link")
     const value = await AsyncStorage.getItem("User")
     const res = await getData("Users", value);
     props.getUser(res)
+    let chk = res?.history.find(e => e?.email == props.route.params?.email)
+    if(!chk){
+      let temp=[res?.history]; temp.push({email:res?.email,profileUri:res?.profileUri,name:res?.name})
+      await saveData("Users", value, {
+        history:temp
+      })
+    }
   }
   return (
     <SafeAreaView style={{ ...GlobalStyles.container, backgroundColor: '#fff' }}>

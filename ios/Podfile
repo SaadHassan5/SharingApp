@@ -12,6 +12,8 @@ target 'SharingApp' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'SharingAppTests' do
     inherit! :complete
     # Pods for testing

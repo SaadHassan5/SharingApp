@@ -1,6 +1,6 @@
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
-import { saveData, uploadFile } from './fire';
+import { filterCollectionSingle, getData, saveData, uploadFile } from './fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Date.prototype.getWeek = function () {
@@ -35,30 +35,33 @@ export const onFacebookButtonPress = async (props) => {
     // Sign-in the user with the credential
     const res = await auth().signInWithCredential(facebookCredential)
     console.log("res", res);
-    if (res?.additionalUserInfo?.isNewUser) {
-        await saveData("Users", res?.additionalUserInfo?.profile?.email, {
-            email: res?.additionalUserInfo?.profile?.email,
-            name: res?.additionalUserInfo?.profile?.name,
-            id: res?.additionalUserInfo?.profile?.id,
-            profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
-            subscribed: [],
-            imgs: [],
-            history: [],
-            pin: [],
-            month: new Date().getMonth(),
-            date: new Date().getDate(),
-            year: new Date().getFullYear(),
-            week: currentWeekNumber,
-        })
-    }
-    else {
-        await saveData("Users", res?.additionalUserInfo?.profile?.email, {
-            email: res?.additionalUserInfo?.profile?.email,
-            name: res?.additionalUserInfo?.profile?.name,
-            id: res?.additionalUserInfo?.profile?.id,
-            profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
-        })
-    }
+        const chk = await getData("Users", res?.additionalUserInfo?.profile?.email)
+        if (chk) {
+            console.log("Old");
+            await saveData("Users", res?.additionalUserInfo?.profile?.email, {
+                email: res?.additionalUserInfo?.profile?.email,
+                name: res?.additionalUserInfo?.profile?.name,
+                id: res?.additionalUserInfo?.profile?.id,
+                profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
+            })
+        }
+        else {
+            console.log("NEW");
+            await saveData("Users", res?.additionalUserInfo?.profile?.email, {
+                email: res?.additionalUserInfo?.profile?.email,
+                name: res?.additionalUserInfo?.profile?.name,
+                id: res?.additionalUserInfo?.profile?.id,
+                profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
+                subscribed: [],
+                imgs: [],
+                history: [],
+                pin: [],
+                month: new Date().getMonth(),
+                date: new Date().getDate(),
+                year: new Date().getFullYear(),
+                week: currentWeekNumber,
+            })
+        }
     await AsyncStorage.setItem('User', res?.additionalUserInfo?.profile?.email);
     await AsyncStorage.setItem('id', res?.additionalUserInfo?.profile?.id);
     props.navigation.replace('UserTab')

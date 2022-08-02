@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:802060354200:android:5c38ffbc75292b41d006ed",
+        "android_client_info": {
+          "package_name": "com.reactfoodf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802060354200-5psgcv928rdjpp1rsqs7np5aba79ldm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg_tXDZgpMSAR04We8jypl_mHlglmM9zU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802060354200-5psgcv928rdjpp1rsqs7np5aba79ldm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:802060354200:android:b7e22a81a4011d43d006ed",
         "android_client_info": {
           "package_name": "com.sharingapp"

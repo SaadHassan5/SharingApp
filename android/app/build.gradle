@@ -133,7 +133,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.sharingapp"
+        applicationId "com.reactfoodf"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -193,6 +193,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation project(':react-native-camera')
     implementation project(':react-native-vector-icons')
     implementation 'com.facebook.android:facebook-android-sdk:latest.release'
     implementation platform('com.google.firebase:firebase-bom:30.3.0')

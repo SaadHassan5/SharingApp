@@ -1,4 +1,4 @@
-package com.sharingapp;
+package com.reactfoodf;
 
 import com.facebook.react.ReactActivity;
 
