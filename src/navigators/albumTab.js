@@ -17,17 +17,19 @@ import Profile from '../screens/Profile';
 import RecieveImages from '../screens/recieveImages';
 import Friends from '../screens/Friends';
 import AllRecievePhotos from '../screens/AllRecievePhotos';
+import AllPhotos from '../screens/AllPhotos';
+import AlbumQr from '../screens/AlbumQr';
 
 const ScannerButton = (prop) => {
   return (
-    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
+    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: 'black', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
       <IconMat name='qr-code-scanner' color={colors.primary} size={30} />
     </TouchableOpacity>
   )
 }
 const Tab = createBottomTabNavigator();
 
-export function UserTab(props) {
+export function AlbumTab(props) {
   return (
     <Tab.Navigator
 
@@ -35,11 +37,11 @@ export function UserTab(props) {
         headerShown: false,
         // tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: colors.primary,
+          backgroundColor: "#fff",
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           // borderWidth: 1,
-          borderColor: '#fff',
+          borderColor: 'black',
           paddingLeft: 20, paddingRight: 20,
           // height: HP(9),
           position: 'absolute',
@@ -48,7 +50,8 @@ export function UserTab(props) {
       }}
 
     >
-      <Tab.Screen name="HomeScreen" component={HomeScreen}
+      
+      <Tab.Screen name="AllPhotos" initialParams={props?.route?.params} component={AllPhotos}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -56,18 +59,13 @@ export function UserTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconMat name={'home'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Home</Text>
+              <IconMat name={'photo'} size={20} color={focused ? "black" : "grey"} />
+              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Photos</Text>
             </View>
           )
         }}
       />
-      {/* <Tab.Screen name="UserQr" component={UserQr} options={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarButton: () => (<ScannerButton {...props} />),
-      }} /> */}
-      <Tab.Screen name="UserQr" component={UserQr}
+      <Tab.Screen name="QR" initialParams={props?.route?.params} component={AlbumQr}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -75,13 +73,13 @@ export function UserTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
+              <IconMat name={'qr-code'} size={20} color={focused ? "black" : "grey"} />
+              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>QR</Text>
             </View>
           )
         }}
       />
-      <Tab.Screen name="Profile" component={Profile}
+      <Tab.Screen name="Recieve" initialParams={props?.route?.params} component={RecieveImages}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -89,36 +87,8 @@ export function UserTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconEntypo name={'user'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Profile</Text>
-            </View>
-          )
-        }}
-      />
-      <Tab.Screen name="Revieve" component={AllRecievePhotos}
-        options={{
-          // tabBarLabel: true,
-          // title: 'Group',
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconEntypo name={'download'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Recieve</Text>
-            </View>
-          )
-        }}
-      />
-      <Tab.Screen name="Friends" component={Friends}
-        options={{
-          // tabBarLabel: true,
-          // title: 'Group',
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconEntypo name={'users'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Friends</Text>
+              <IconMatComunity name={'download'} size={20} color={focused ? "black" : "grey"} />
+              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>RecieveImages</Text>
             </View>
           )
         }}

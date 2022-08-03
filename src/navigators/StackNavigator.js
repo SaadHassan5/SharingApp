@@ -17,6 +17,8 @@ import RecieveImages from '../screens/recieveImages';
 import AllPhotos from '../screens/AllPhotos';
 import FriendProfile from '../screens/FriendProfile';
 import AlbumDetail from '../screens/AlbumDetail';
+import { AlbumTab } from './albumTab';
+import OpenImage from '../screens/openImage';
 
 
 
@@ -41,6 +43,8 @@ class Stack extends Component {
           <MyStack.Screen name="AllPhotos" component={AllPhotos} />
           <MyStack.Screen name="FriendProfile" component={FriendProfile} />
           <MyStack.Screen name="AlbumDetail" component={AlbumDetail} />
+          <MyStack.Screen name="AlbumTab" component={AlbumTab} />
+          <MyStack.Screen name="OpenImage" component={OpenImage} />
         </MyStack.Navigator>
     )
   }

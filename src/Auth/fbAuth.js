@@ -2,6 +2,7 @@ import { LoginManager, AccessToken } from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
 import { filterCollectionSingle, getData, saveData, uploadFile } from './fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);

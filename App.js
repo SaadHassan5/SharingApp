@@ -7,30 +7,16 @@ import { store } from './src/root/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import messaging from '@react-native-firebase/messaging';
+import { LocalNotifee } from './src/Services/LocalPushController';
 
 const App = () => {
   const nav = useRef();
   useEffect(() => {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      // navigation.navigate(remoteMessage.data.type);
-    });
-    messaging()
-    .getInitialNotification()
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        console.log(
-          'Notification caused app to open from quit state:',
-          remoteMessage.notification,
-          );
-          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-        }
-        // setLoading(false);
-      });
       getLink();
+      notf();
+    notfBack();
+    notfInitial();
+
     dynamicLinks()
       .getInitialLink()
       .then(async (link) => {
@@ -82,6 +68,37 @@ const App = () => {
       //   // listener(url);
     });
     return linkingSubscription;
+  }
+  const notf = async () => {
+    const unsubscribe = await messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      // Alert.alert(remoteMessage?.notification?.title)
+      // selectFile();
+      LocalNotifee(remoteMessage?.notification?.title,remoteMessage?.notification?.body)
+
+    })
+    return unsubscribe;
+  }
+  const notfBack = async () => {
+    const unsubscribe = await messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+      // selectFile();
+  });
+    return unsubscribe;
+  }
+  
+  const notfInitial = async () => {
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+        }
+      });
   }
 
   return (

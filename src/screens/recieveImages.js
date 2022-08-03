@@ -24,6 +24,7 @@ function RecieveImages(props) {
     const [active, setActive] = useState(false)
 
     useEffect(() => {
+        console.log(props.route);
         const unsubscribe = props.navigation.addListener('focus', () => {
             // The screen is focused
             // Call any action and update data
@@ -36,7 +37,7 @@ function RecieveImages(props) {
         // console.log("USSS",props?.user);
         const value = await AsyncStorage.getItem('User')
         console.log("email", value);
-        const res = await filterCollectionTriple("Albums", value, false, false, "owner", "approve", "reject");
+        const res = await filterCollectionTriple("Albums", value, false, props?.route?.params?.albumName, "owner", "approve", "heading");
         console.log(res);
         setAllAlbums(res)
     }

@@ -1,4 +1,4 @@
-package com.reactfoodf;
+package com.fammm.fammm;
 
 import android.app.Application;
 import android.content.Context;

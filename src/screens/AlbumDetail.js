@@ -75,6 +75,7 @@ const AlbumDetail = (props) => {
                 owner:props?.user?.email,
             })
             await getComments();
+            setCom('')
         }
     }
     return (
@@ -96,7 +97,7 @@ const AlbumDetail = (props) => {
                         renderItem={({ item }) =>
                             <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5), marginTop: HP(.5) }} />
                         } />
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:HP(2) }}>
                         <View style={{ ...GlobalStyles.row }}>
                             {item?.likedBy?.find(e => e?.email == props?.user?.email) ?
                                 <TouchableOpacity onPress={() => { unLike(item) }}>

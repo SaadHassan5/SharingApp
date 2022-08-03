@@ -102,7 +102,7 @@ const UploadImageScreen = (props) => {
   }
   return (
     <SafeAreaView style={{ ...GlobalStyles.container, backgroundColor: '#fff' }}>
-      <Header title={props.route.params?.heading} goBack={false} />
+      <Header title={props.route.params?.heading} onPress={()=>props?.navigation.goBack()} />
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: HP(10) }}>
         <View style={{ width: "80%" }}>
           <AppButton onPress={() => { onBrowse() }} title={"Add Images"} />

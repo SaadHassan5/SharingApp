@@ -1,4 +1,4 @@
-package com.reactfoodf;
+package com.fammm.fammm;
 
 import com.facebook.react.ReactActivity;
 

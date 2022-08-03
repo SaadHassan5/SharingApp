@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator,Linking, Share, View, StyleSheet, TouchableOpacity, Text, SafeAreaView, FlatList, Platform, ToastAndroid } from 'react-native';
+import React, { useEffect, useState,useRef } from 'react';
+import { ActivityIndicator, Linking, Share, View, StyleSheet, TouchableOpacity, Text, SafeAreaView, FlatList, Platform, ToastAndroid, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { HP, palette, WP } from '../assets/config';
 import { ChangeBackgroundColor, GetUser } from '../root/action';
@@ -23,8 +23,10 @@ const UserQr = (props) => {
     const [open, setOpen] = useState(false)
     const [opt, setOpt] = useState('Login As')
     const [heading, setHeading] = useState('NewAlbum')
+    const [link, setLink] = useState('')
     const [check, setCheck] = useState("Public")
-    const [email, setEmail] = useState(props?.user?.email + "/"+heading);
+    const [email, setEmail] = useState(props?.user?.email + "/" + heading);
+    const scroll = useRef();
     const loginAs = [
         { key: 'User' },
         { key: 'Police' },
@@ -37,8 +39,14 @@ const UserQr = (props) => {
             // alert(msg);
         }
     }
-    useEffect(()=>{
-    },[])
+    useEffect(() => {
+        const unsubscribe = props.navigation.addListener('focus', () => {
+            // recieveAlbums()
+            setOpen(false);
+            // setHeading('')
+          });
+          return unsubscribe;
+    }, [props?.navigation])
 
     const onShare = async () => {
 
@@ -60,7 +68,7 @@ const UserQr = (props) => {
             alert(error.message);
         }
     }
-    const onShareWhatsapp = async() => {
+    const onShareWhatsapp = async () => {
         // let url = 'whatsapp://send?text=' + "https://sharingapp.page.link/moonshot/";
         let url = 'whatsapp://send?text=' + 'https://sharingapp.page.link/' + replaceFunc(email, " ", "-") + '/';
         Linking.openURL(url)
@@ -82,28 +90,29 @@ const UserQr = (props) => {
                 console.log("image---->", response?.assets);
                 setImgs(response?.assets)
                 // toastPrompt("Image Uploaded")
-                AlertService.confirm("Upload PIcs?").then((res) => {
-                    if (res) {
-                        onAddPic( response.assets)
-                    }
-                })
             }
         })
     }
-    async function onAddPic( imgz) {
-        const value = await AsyncStorage.getItem("User")
-        setActive(true)
-        let upImgs = await uploadMultiFile(imgz, value)
-        setTimeout(async () => {
-            if (upImgs.length > 0) {
-                onApproveAll(upImgs)
-                // props.navigation.goBack();
-                setActive(false)
-                // getAlbums()
-            }
-            else
-                setActive(false)
-        }, 3000 * imgz?.length);
+    async function onAddPic() {
+        if (imgs?.length > 0 && heading != '') {
+            AlertService.confirm("Upload PIcs?").then(async (res) => {
+                if (res) {
+                    const value = await AsyncStorage.getItem("User")
+                    setActive(true)
+                    let upImgs = await uploadMultiFile(imgs, value)
+                    setTimeout(async () => {
+                        if (upImgs.length > 0) {
+                            onApproveAll(upImgs)
+                            // props.navigation.goBack();
+                            setActive(false)
+                            // getAlbums()
+                        }
+                        else
+                            setActive(false)
+                    }, 3000 * imgs?.length);
+                }
+            })
+        }
     }
     const replaceFunc = (str, search, replace) => {
         const pieces = str.split(search);
@@ -111,7 +120,7 @@ const UserQr = (props) => {
         return resultingString;
     }
     async function onApproveAll(item) {
-        const value=await AsyncStorage.getItem("User")
+        const value = await AsyncStorage.getItem("User")
         const res = await filterCollection("Recieved", heading.trim(), value, "albumName", "owner");
         // console.log("Find approve item", res);
         if (res.length < 1) {
@@ -120,10 +129,16 @@ const UserQr = (props) => {
                 owner: value,
                 imgs: item,
                 view: check,
+                likes: 0,
+                likedBy: [],
                 approve: true,
                 reject: false,
-                feature:false,
+                feature: false,
             })
+            setOpen(true); 
+            setImgs([]);
+            setHeading("")
+            scroll.current.scrollToEnd({ animated: true });
         }
         else {
             await saveData("Recieved", res[0]?.id, {
@@ -134,55 +149,81 @@ const UserQr = (props) => {
     }
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <Header title="Q R" style={{}} goBack={() => { props.navigation.goBack() }} />
-            <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: "70%", marginVertical: HP(5) }}>
-                    <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} />
-                    <View style={{ ...GlobalStyles.row, justifyContent: 'space-around' }}>
-                        <TouchableOpacity onPress={() => { setCheck('Public') }} style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
-                            <Text style={{ ...styles.emailTxt, color: palette.labelGray }}>Public</Text>
-                            <Checkbox status={check == "Public" ? 'checked' : 'unchecked'} color={colors.primary} uncheckedColor={'red'} />
+            <ScrollView ref={scroll}
+                style={{ flexGrow: 1, backgroundColor: "#fff" }}
+                contentContainerStyle={{ paddingBottom: HP(10), paddingHorizontal: WP(5) }}
+                showsVerticalScrollIndicator={false}
+            >
+                <Header title="Q R" style={{}} onPress={() => { props.navigation.goBack() }} />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ width: "90%", marginVertical: HP(5) }}>
+                        <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} />
+
+                        <TouchableOpacity onPress={() => { onBrowse() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5), backgroundColor: palette.lighBlueBtnTitle, alignSelf: 'center', marginTop: HP(2) }}>
+                            <IconFoundation name='upload' color={"#fff"} size={22} />
+                            <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: "#fff", textAlign: 'center' }}>Upload Images
+                            </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { setCheck('Private') }} style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
-                            <Text style={{ ...styles.emailTxt, color: palette.labelGray }}>Private</Text>
-                            <Checkbox status={check == "Private" ? 'checked' : 'unchecked'} color={colors.primary} uncheckedColor={'red'} />
+                        <FlatList
+                            numColumns={3}
+                            data={imgs}
+                            style={{ marginTop: HP(2) }}
+                            // showsHorizontalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) =>
+                                <Image source={{ uri: item?.uri }} style={{ ...styles.img, marginRight: WP(5), marginTop: HP(1) }} />
+                            }
+                        />
+                        <View style={{ ...GlobalStyles.row, justifyContent: 'space-around', marginTop: HP(1) }}>
+                            <TouchableOpacity onPress={() => { setCheck('Public') }} style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
+                                <Text style={{ ...styles.emailTxt, color: palette.labelGray }}>Public</Text>
+                                <Checkbox status={check == "Public" ? 'checked' : 'unchecked'} color={colors.primary} uncheckedColor={'red'} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => { setCheck('Private') }} style={{ flexDirection: 'row', alignItems: 'center', marginTop: HP(1) }}>
+                                <Text style={{ ...styles.emailTxt, color: palette.labelGray }}>Private</Text>
+                                <Checkbox status={check == "Private" ? 'checked' : 'unchecked'} color={colors.primary} uncheckedColor={'red'} />
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={() => { onAddPic() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(25), backgroundColor: colors.primary, alignSelf: "center", marginTop: HP(2) }}>
+                            {/* <IconFoundation name='upload' color={"#fff"} size={22} /> */}
+                            <Text style={{ ...styles.emailTxt, fontSize: 16, color: "#fff", textAlign: 'center' }}>Save
+                            </Text>
                         </TouchableOpacity>
                     </View>
+                    {open &&
+                        <View style={{alignSelf: 'center',width:'100%'}}>
+                            <View
+                                style={{alignSelf: 'center',}}
+                                >
+                            <QRCode
+                                value={email}
+                                size={200}
+                            />
+                            </View>
+                            <View style={{ ...styles.row, justifyContent: 'space-around' }}>
+                                <TouchableOpacity onPress={() => { props.navigation.navigate("Scanner") }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
+                                    <IconMat name='qr-code-scanner' color={colors.primary} size={22} />
+                                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16 }}>Scan QR
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => { onShare() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
+                                    <IconMat name='share' color={colors.primary} size={22} />
+                                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16 }}>Invite People</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity onPress={() => { onShareWhatsapp() }} style={{ ...styles.row, paddingVertical: HP(1.3), paddingHorizontal: WP(5), backgroundColor: palette.status_dot_bg_green, borderRadius: WP(1.4) }}>
+                                <IconFontiso name='whatsapp' color={"#fff"} size={22} />
+                                <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: '#ffff' }}>Invite People on Whatsapp</Text>
+                            </TouchableOpacity>
+                        </View>
+                     } 
                 </View>
-                <TouchableOpacity onPress={() => { onBrowse() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
-                    <IconFoundation name='upload' color={colors.primary} size={22} />
-                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16 }}>Add Your Images in this Album
-                    </Text>
-                </TouchableOpacity>
-                <QRCode
-                    value={email}
-                    size={200}
-                />
-                <View style={{ ...styles.row, justifyContent: 'space-around' }}>
-                    <TouchableOpacity onPress={() => { props.navigation.navigate("Scanner") }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
-                        <IconMat name='qr-code-scanner' color={colors.primary} size={22} />
-                        <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16 }}>Scan QR
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { onShare() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
-                        <IconMat name='share' color={colors.primary} size={22} />
-                        <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16 }}>Invite People</Text>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity onPress={() => { onShareWhatsapp() }} style={{ ...styles.row, paddingVertical: HP(1.3), paddingHorizontal: WP(5), backgroundColor: palette.status_dot_bg_green, borderRadius: WP(1.4) }}>
-                    <IconFontiso name='whatsapp' color={"#fff"} size={22} />
-                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: '#ffff' }}>Invite People on Whatsapp</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity onPress={() => { props.navigation.navigate('History') }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
-                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 18 }}>History
-                    </Text>
-                </TouchableOpacity> */}
-            </View>
-            {active &&
+                {active &&
                     <View style={{ width: '100%', height: "100%", backgroundColor: 'transparent', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', position: 'absolute', }}>
                         <ActivityIndicator size={"large"} color="#00ff00" />
                     </View>
                 }
+            </ScrollView>
         </SafeAreaView>
     )
 }

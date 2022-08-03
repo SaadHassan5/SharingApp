@@ -112,9 +112,9 @@ const HomeScreen = (props) => {
                                     // showsHorizontalScrollIndicator={false}
                                     keyExtractor={item => item.id}
                                     renderItem={({ item }) =>
-                                        <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                                        <Image source={{ uri: item }} style={{ width: WP(50), height: WP(50), marginRight: WP(5) }} />
                                     } />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:HP(2) }}>
                                     <View style={{ ...GlobalStyles.row }}>
                                         { item?.likedBy?.find(e=> e?.email==props?.user?.email) ?
                                         <TouchableOpacity onPress={() => { unLike(item) }}>
