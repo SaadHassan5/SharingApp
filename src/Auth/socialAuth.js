@@ -1,6 +1,8 @@
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform, ToastAndroid } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
 import { saveData } from './fire';
 const toastPrompt = (msg) => {
   if (Platform.OS === 'android') {
@@ -19,6 +21,8 @@ Date.prototype.getWeek = function () {
   return Math.ceil(dayOfYear / 7)
 };
 const Signup = async (email, password, name, props) => {
+  const token = await messaging().getToken();
+
   let response = {}; 
   const today = new Date();
   const currentWeekNumber = today.getWeek();
@@ -37,6 +41,7 @@ const Signup = async (email, password, name, props) => {
         imgs: [],
         history: [],
         pin:[],
+        token:token,
         month: new Date().getMonth(),
         date: new Date().getDate(),
         year: new Date().getFullYear(),
@@ -60,6 +65,8 @@ const Signup = async (email, password, name, props) => {
 const Signin = async (email, password, props) => {
   // let dat=new Date().toDateString().toString().split(' ')
  const link= await AsyncStorage.getItem("Link");
+ const token = await messaging().getToken();
+
   await auth()
     .signInWithEmailAndPassword(email, password)
     .then(async (res) => {
@@ -68,7 +75,7 @@ const Signin = async (email, password, props) => {
       await AsyncStorage.setItem('User', email);
       await AsyncStorage.setItem('id', res?.user?.uid);
       await saveData("Users", email, {
-        email: email,
+        token:token,
       })
       if(link!=null){
         console.log(link);

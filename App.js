@@ -1,4 +1,3 @@
-
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { View, Linking } from 'react-native';
@@ -7,10 +6,31 @@ import Stack from './src/navigators/StackNavigator';
 import { store } from './src/root/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import messaging from '@react-native-firebase/messaging';
+
 const App = () => {
   const nav = useRef();
   useEffect(() => {
-    getLink();
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      // navigation.navigate(remoteMessage.data.type);
+    });
+    messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state:',
+          remoteMessage.notification,
+          );
+          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+        }
+        // setLoading(false);
+      });
+      getLink();
     dynamicLinks()
       .getInitialLink()
       .then(async (link) => {
@@ -45,6 +65,8 @@ const App = () => {
     //   // listener(url);
   };
   async function getLink() {
+    const token = await messaging().getToken();
+    console.log(token);
     const linkingSubscription = Linking.addEventListener('url', async ({ url }) => {
       let sp = url.split('/')
       console.log("LinkedUrlApp", url, sp?.length);

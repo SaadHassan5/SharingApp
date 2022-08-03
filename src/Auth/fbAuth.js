@@ -11,6 +11,8 @@ Date.prototype.getWeek = function () {
 };
 export const onFacebookButtonPress = async (props) => {
     // Attempt login with permissions
+    const token = await messaging().getToken();
+
     const today = new Date();
     const currentWeekNumber = today.getWeek();
     LoginManager.logOut();
@@ -43,6 +45,7 @@ export const onFacebookButtonPress = async (props) => {
                 name: res?.additionalUserInfo?.profile?.name,
                 id: res?.additionalUserInfo?.profile?.id,
                 profileUri: res?.additionalUserInfo?.profile?.picture?.data?.url,
+                token:token,
             })
         }
         else {
@@ -55,6 +58,7 @@ export const onFacebookButtonPress = async (props) => {
                 subscribed: [],
                 imgs: [],
                 history: [],
+                token:token,
                 pin: [],
                 month: new Date().getMonth(),
                 date: new Date().getDate(),

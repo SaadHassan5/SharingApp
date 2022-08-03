@@ -71,7 +71,8 @@ const AlbumDetail = (props) => {
                 name: props?.user?.name,
                 profileUri: props?.user?.profileUri,
                 email: props?.user?.email,
-                comment: com
+                comment: com,
+                owner:props?.user?.email,
             })
             await getComments();
         }
@@ -81,7 +82,7 @@ const AlbumDetail = (props) => {
             <Header title={props.route.params?.albumName} goBack={() => { props.navigation.goBack() }} />
             <ScrollView
                 style={{ flexGrow: 1, backgroundColor: "#fff" }}
-                contentContainerStyle={{ paddingVertical: HP(2), paddingBottom: HP(10), paddingHorizontal: WP(5) }}
+                contentContainerStyle={{ paddingVertical: HP(2), paddingBottom: HP(20), paddingHorizontal: WP(5) }}
                 showsVerticalScrollIndicator={false}
             >
 
