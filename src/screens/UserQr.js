@@ -95,7 +95,7 @@ const UserQr = (props) => {
     }
     async function onAddPic() {
         if (imgs?.length > 0 && heading != '') {
-            AlertService.confirm("Upload PIcs?").then(async (res) => {
+            AlertService.confirm("Upload Pictures?").then(async (res) => {
                 if (res) {
                     const value = await AsyncStorage.getItem("User")
                     setActive(true)
@@ -124,6 +124,8 @@ const UserQr = (props) => {
         const res = await filterCollection("Recieved", heading.trim(), value, "albumName", "owner");
         // console.log("Find approve item", res);
         if (res.length < 1) {
+            setOpen(true); 
+            scroll.current.scrollToEnd({ animated: true });
             await saveData("Recieved", '', {
                 albumName: heading,
                 owner: value,
@@ -135,10 +137,8 @@ const UserQr = (props) => {
                 reject: false,
                 feature: false,
             })
-            setOpen(true); 
             setImgs([]);
             setHeading("")
-            scroll.current.scrollToEnd({ animated: true });
         }
         else {
             await saveData("Recieved", res[0]?.id, {

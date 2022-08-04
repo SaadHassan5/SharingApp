@@ -48,6 +48,20 @@ export function UserTab(props) {
       }}
 
     >
+    <Tab.Screen name="UserQr" component={UserQr}
+      options={{
+        // tabBarLabel: true,
+        // title: 'Group',
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarIcon: ({ color, size, focused }) => (
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
+            <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
+          </View>
+        )
+      }}
+    />
       <Tab.Screen name="HomeScreen" component={HomeScreen}
         options={{
           // tabBarLabel: true,
@@ -67,20 +81,6 @@ export function UserTab(props) {
         tabBarShowLabel: false,
         tabBarButton: () => (<ScannerButton {...props} />),
       }} /> */}
-      <Tab.Screen name="UserQr" component={UserQr}
-        options={{
-          // tabBarLabel: true,
-          // title: 'Group',
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
-              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
-            </View>
-          )
-        }}
-      />
       <Tab.Screen name="Profile" component={Profile}
         options={{
           // tabBarLabel: true,
