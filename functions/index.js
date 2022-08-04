@@ -89,7 +89,7 @@ exports.sendFollowingNotification = functions.firestore
                     const payload = {
                         notification: {
                             title: `Like <3`,
-                            body: `${after?.likedBy[0]?.name} liked ${after?.albumName}`,
+                            body: `${after?.likedBy[after?.likedBy?.length-1]?.name} liked ${after?.albumName}`,
                             sound: 'default',
                         },
                     };

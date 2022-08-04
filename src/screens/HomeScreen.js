@@ -76,9 +76,9 @@ const HomeScreen = (props) => {
     }
     const unLike = async (item) => {
         let sub = [];
-        item?.likedBy.filter((i)=>{
-            if(i?.email!=props?.user?.email)
-            sub.push(i)
+        item?.likedBy.filter((i) => {
+            if (i?.email != props?.user?.email)
+                sub.push(i)
         })
         await saveData("Recieved", item?.id, {
             likes: item?.likes - 1,
@@ -100,37 +100,39 @@ const HomeScreen = (props) => {
                         data={albumsR}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
-                            <Pressable onPress={() => { props.navigation.navigate("AllPhotos", item) }} style={{ marginTop: HP(2) }}>
-                                <View style={{ ...GlobalStyles.row, justifyContent: 'space-between', paddingVertical: HP(.5) }}>
-                                    <Text style={{ ...Styles.titleTxt, }}>{item?.albumName}</Text>
-                                    <Text style={{ ...Styles.titleTxt, color: 'red', fontSize: 12 }}>{item?.view}</Text>
-                                </View>
-                                <FlatList
-                                    // numColumns={1}
-                                    horizontal
-                                    data={item?.imgs}
-                                    // showsHorizontalScrollIndicator={false}
-                                    keyExtractor={item => item.id}
-                                    renderItem={({ item }) =>
-                                        <Image source={{ uri: item }} style={{ width: WP(50), height: WP(50), marginRight: WP(5) }} />
-                                    } />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:HP(2) }}>
-                                    <View style={{ ...GlobalStyles.row }}>
-                                        { item?.likedBy?.find(e=> e?.email==props?.user?.email) ?
-                                        <TouchableOpacity onPress={() => { unLike(item) }}>
-                                            <AntDesign name='like1' size={25} color={colors.primary} />
-                                        </TouchableOpacity>
-:
-                                        <TouchableOpacity onPress={() => { onLike(item) }}>
-                                            <AntDesign name='like2' size={25} color={colors.primary} />
-                                        </TouchableOpacity>}
-                                        <AppText style={{ paddingLeft: WP(2), color: colors.primary, fontFamily: fontFamily.medium }}>{item?.likes}</AppText>
+                            <View>
+                                <Pressable onPress={() => { props.navigation.navigate("AllPhotos", item) }} style={{ marginTop: HP(2) }}>
+                                    <View style={{ ...GlobalStyles.row, justifyContent: 'space-between', paddingVertical: HP(.5) }}>
+                                        <Text style={{ ...Styles.titleTxt, }}>{item?.albumName}</Text>
+                                        <Text style={{ ...Styles.titleTxt, color: 'red', fontSize: 12 }}>{item?.view}</Text>
                                     </View>
-                                    <TouchableOpacity onPress={()=>{props.navigation.navigate("AlbumDetail",item)}}>
+                                    <FlatList
+                                        // numColumns={1}
+                                        horizontal
+                                        data={item?.imgs}
+                                        // showsHorizontalScrollIndicator={false}
+                                        keyExtractor={item => item.id}
+                                        renderItem={({ item }) =>
+                                            <Image source={{ uri: item }} style={{ width: WP(50), height: WP(50), marginRight: WP(5) }} />
+                                        } />
+                                </Pressable>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: HP(0) }}>
+                                    <View style={{ ...GlobalStyles.row }}>
+                                        {item?.likedBy?.find(e => e?.email == props?.user?.email) ?
+                                            <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(2)}} onPress={() => { unLike(item) }}>
+                                                <AntDesign name='like1' size={25} color={colors.primary} />
+                                            </TouchableOpacity>
+                                            :
+                                            <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(2)}} onPress={() => { onLike(item) }}>
+                                                <AntDesign name='like2' size={25} color={colors.primary} />
+                                            </TouchableOpacity>}
+                                        <AppText style={{  color: colors.primary, fontFamily: fontFamily.medium }}>{item?.likes}</AppText>
+                                    </View>
+                                    <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(5)}} onPress={() => { props.navigation.navigate("AlbumDetail", item) }}>
                                         <IconMatCom name='comment' size={25} color={colors.primary} />
                                     </TouchableOpacity>
                                 </View>
-                            </Pressable>
+                            </View>
                         }
                     />
                 </View>
