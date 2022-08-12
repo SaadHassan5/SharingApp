@@ -13,6 +13,7 @@ import { GlobalStyles } from '../global/global.styles';
 import AppTextInput from '../components/AppTextInput';
 import { Checkbox } from 'react-native-paper';
 import IconFoundation from "react-native-vector-icons/Foundation"
+import IconFonAw from "react-native-vector-icons/FontAwesome"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { filterCollection, saveData, uploadFile, uploadMultiFile } from '../Auth/fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -101,76 +102,76 @@ const UserQr = (props) => {
                     const value = await AsyncStorage.getItem("User")
                     setActive(true)
                     let upImgs = []
-                    if(imgs?.length>0){
-                        let i0= await uploadFile(imgs[0]?.uri,imgs[0]?.value)
+                    if (imgs?.length > 0) {
+                        let i0 = await uploadFile(imgs[0]?.uri, imgs[0]?.value)
                         upImgs.push(i0)
                     }
-                    if(imgs?.length>1){
-                        let i1= await uploadFile(imgs[1]?.uri,imgs[1]?.value)
+                    if (imgs?.length > 1) {
+                        let i1 = await uploadFile(imgs[1]?.uri, imgs[1]?.value)
                         upImgs.push(i1)
                     }
-                    if(imgs?.length>2){
-                        let i2= await uploadFile(imgs[2]?.uri,imgs[2]?.value)
+                    if (imgs?.length > 2) {
+                        let i2 = await uploadFile(imgs[2]?.uri, imgs[2]?.value)
                         upImgs.push(i2)
                     }
-                    if(imgs?.length>3){
-                        let i3= await uploadFile(imgs[3]?.uri,imgs[3]?.value)
+                    if (imgs?.length > 3) {
+                        let i3 = await uploadFile(imgs[3]?.uri, imgs[3]?.value)
                         upImgs.push(i3)
                     }
-                    if(imgs?.length>4){
-                        let i4= await uploadFile(imgs[4]?.uri,imgs[4]?.value)
+                    if (imgs?.length > 4) {
+                        let i4 = await uploadFile(imgs[4]?.uri, imgs[4]?.value)
                         upImgs.push(i4)
                     }
-                    if(imgs?.length>5){
-                        let i5= await uploadFile(imgs[5]?.uri,imgs[5]?.value)
+                    if (imgs?.length > 5) {
+                        let i5 = await uploadFile(imgs[5]?.uri, imgs[5]?.value)
                         upImgs.push(i5)
                     }
-                    if(imgs?.length>6){
-                        let i6= await uploadFile(imgs[6]?.uri,imgs[6]?.value)
+                    if (imgs?.length > 6) {
+                        let i6 = await uploadFile(imgs[6]?.uri, imgs[6]?.value)
                         upImgs.push(i6)
                     }
-                    
-                    if(imgs?.length>7){
-                        let i7= await uploadFile(imgs[7]?.uri,imgs[7]?.value)
+
+                    if (imgs?.length > 7) {
+                        let i7 = await uploadFile(imgs[7]?.uri, imgs[7]?.value)
                         upImgs.push(i7)
                     }
-                    if(imgs?.length>8){
-                        let i8= await uploadFile(imgs[8]?.uri,imgs[8]?.value)
+                    if (imgs?.length > 8) {
+                        let i8 = await uploadFile(imgs[8]?.uri, imgs[8]?.value)
                         upImgs.push(i8)
                     }
-                    if(imgs?.length>9){
-                        let i9= await uploadFile(imgs[9]?.uri,imgs[9]?.value)
+                    if (imgs?.length > 9) {
+                        let i9 = await uploadFile(imgs[9]?.uri, imgs[9]?.value)
                         upImgs.push(i9)
                     }
-                    if(imgs?.length>10){
-                        let i10= await uploadFile(imgs[10]?.uri,imgs[10]?.value)
+                    if (imgs?.length > 10) {
+                        let i10 = await uploadFile(imgs[10]?.uri, imgs[10]?.value)
                         upImgs.push(i10)
                     }
-                    if(imgs?.length>11){
-                        let i11= await uploadFile(imgs[11]?.uri,imgs[11]?.value)
+                    if (imgs?.length > 11) {
+                        let i11 = await uploadFile(imgs[11]?.uri, imgs[11]?.value)
                         upImgs.push(i11)
                     }
-                    if(imgs?.length>12){
-                        let i12= await uploadFile(imgs[12]?.uri,imgs[12]?.value)
+                    if (imgs?.length > 12) {
+                        let i12 = await uploadFile(imgs[12]?.uri, imgs[12]?.value)
                         upImgs.push(i12)
                     }
-                    if(imgs?.length>13){
-                        let i13= await uploadFile(imgs[13]?.uri,imgs[13]?.value)
+                    if (imgs?.length > 13) {
+                        let i13 = await uploadFile(imgs[13]?.uri, imgs[13]?.value)
                         upImgs.push(i13)
                     }
-                    if(imgs?.length>14){
-                        let i14= await uploadFile(imgs[14]?.uri,imgs[14]?.value)
+                    if (imgs?.length > 14) {
+                        let i14 = await uploadFile(imgs[14]?.uri, imgs[14]?.value)
                         upImgs.push(i14)
                     }
                     // setTimeout(async () => {
                     //     if (upImgs.length > 0) {
-                            onApproveAll(upImgs)
-                            // props.navigation.goBack();
-                            setActive(false)
-                            // getAlbums()
-                        // }
-                        // else
-                            setActive(false)
+                    onApproveAll(upImgs)
+                    // props.navigation.goBack();
+                    setActive(false)
+                    // getAlbums()
+                    // }
+                    // else
+                    setActive(false)
                     // }, 3000 * imgs?.length);
                 }
             })
@@ -208,6 +209,11 @@ const UserQr = (props) => {
         }
 
     }
+    const onShareW = async (e) => {
+        // await buildLink()
+        let url = 'whatsapp://send?text=' + e;
+        await Linking.openURL(url)
+      };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView ref={scroll}
@@ -216,6 +222,12 @@ const UserQr = (props) => {
                 showsVerticalScrollIndicator={false}
             >
                 <Header title="Q R" style={{}} onPress={() => { props.navigation.goBack() }} />
+                <Text style={{ ...styles.emailTxt, paddingLeft: WP(5), fontSize: 12 ,marginTop:HP(3)}}>STEP 01:<Text style={{color:'red'}}>     IMPORTANT</Text> </Text>
+                <TouchableOpacity onPress={() => { onShareW('https://sharingapp.page.link/') }} style={{ ...styles.row, paddingVertical: HP(1.3), marginVertical: HP(1), paddingHorizontal: WP(5), backgroundColor: 'green', alignSelf: 'center', borderRadius: WP(2), width: WP(70) }}>
+                    <IconFonAw name='whatsapp' color={"#fff"} size={25} />
+                    <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 12, color: '#fff', textAlign: 'center' }}>Share this App with Family
+                    </Text>
+                </TouchableOpacity>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ width: "90%", marginVertical: HP(5) }}>
                         <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} />
