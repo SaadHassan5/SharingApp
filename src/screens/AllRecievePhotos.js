@@ -60,7 +60,7 @@ function AllRecievePhotos(props) {
             renderItem={({ item }) =>
               <View>
                 {item?.imgs?.length > 0 &&
-                  <Pressable onPress={() => { props.navigation.navigate("AlbumTab", item) }}>
+                  <View>
                     <Text style={{ ...styles.titleTxt, paddingVertical: HP(3) }}>{item?.albumName}</Text>
                     <FlatList
                       // numColumns={1}
@@ -69,10 +69,12 @@ function AllRecievePhotos(props) {
                       showsHorizontalScrollIndicator={false}
                       keyExtractor={item => item.id}
                       renderItem={({ item }) =>
-                        <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                        <Pressable onPress={() => { props.navigation.navigate("AlbumTab", item) }}>
+                          <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                        </Pressable>
                       } />
 
-                  </Pressable>
+                  </View>
                 }
               </View>
             }

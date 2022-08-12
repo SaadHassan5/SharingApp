@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ActivityIndicator, Linking, Share, View, StyleSheet, TouchableOpacity, Text, SafeAreaView, FlatList, Platform, ToastAndroid, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { HP, palette, WP } from '../assets/config';
@@ -14,7 +14,7 @@ import AppTextInput from '../components/AppTextInput';
 import { Checkbox } from 'react-native-paper';
 import IconFoundation from "react-native-vector-icons/Foundation"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { filterCollection, saveData, uploadMultiFile } from '../Auth/fire';
+import { filterCollection, saveData, uploadFile, uploadMultiFile } from '../Auth/fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertService from '../Services/alertService';
 const UserQr = (props) => {
@@ -44,8 +44,8 @@ const UserQr = (props) => {
             // recieveAlbums()
             setOpen(false);
             // setHeading('')
-          });
-          return unsubscribe;
+        });
+        return unsubscribe;
     }, [props?.navigation])
 
     const onShare = async () => {
@@ -97,19 +97,81 @@ const UserQr = (props) => {
         if (imgs?.length > 0 && heading != '') {
             AlertService.confirm("Upload Pictures?").then(async (res) => {
                 if (res) {
+                    setOpen(true);
                     const value = await AsyncStorage.getItem("User")
                     setActive(true)
-                    let upImgs = await uploadMultiFile(imgs, value)
-                    setTimeout(async () => {
-                        if (upImgs.length > 0) {
+                    let upImgs = []
+                    if(imgs?.length>0){
+                        let i0= await uploadFile(imgs[0]?.uri,imgs[0]?.value)
+                        upImgs.push(i0)
+                    }
+                    if(imgs?.length>1){
+                        let i1= await uploadFile(imgs[1]?.uri,imgs[1]?.value)
+                        upImgs.push(i1)
+                    }
+                    if(imgs?.length>2){
+                        let i2= await uploadFile(imgs[2]?.uri,imgs[2]?.value)
+                        upImgs.push(i2)
+                    }
+                    if(imgs?.length>3){
+                        let i3= await uploadFile(imgs[3]?.uri,imgs[3]?.value)
+                        upImgs.push(i3)
+                    }
+                    if(imgs?.length>4){
+                        let i4= await uploadFile(imgs[4]?.uri,imgs[4]?.value)
+                        upImgs.push(i4)
+                    }
+                    if(imgs?.length>5){
+                        let i5= await uploadFile(imgs[5]?.uri,imgs[5]?.value)
+                        upImgs.push(i5)
+                    }
+                    if(imgs?.length>6){
+                        let i6= await uploadFile(imgs[6]?.uri,imgs[6]?.value)
+                        upImgs.push(i6)
+                    }
+                    
+                    if(imgs?.length>7){
+                        let i7= await uploadFile(imgs[7]?.uri,imgs[7]?.value)
+                        upImgs.push(i7)
+                    }
+                    if(imgs?.length>8){
+                        let i8= await uploadFile(imgs[8]?.uri,imgs[8]?.value)
+                        upImgs.push(i8)
+                    }
+                    if(imgs?.length>9){
+                        let i9= await uploadFile(imgs[9]?.uri,imgs[9]?.value)
+                        upImgs.push(i9)
+                    }
+                    if(imgs?.length>10){
+                        let i10= await uploadFile(imgs[10]?.uri,imgs[10]?.value)
+                        upImgs.push(i10)
+                    }
+                    if(imgs?.length>11){
+                        let i11= await uploadFile(imgs[11]?.uri,imgs[11]?.value)
+                        upImgs.push(i11)
+                    }
+                    if(imgs?.length>12){
+                        let i12= await uploadFile(imgs[12]?.uri,imgs[12]?.value)
+                        upImgs.push(i12)
+                    }
+                    if(imgs?.length>13){
+                        let i13= await uploadFile(imgs[13]?.uri,imgs[13]?.value)
+                        upImgs.push(i13)
+                    }
+                    if(imgs?.length>14){
+                        let i14= await uploadFile(imgs[14]?.uri,imgs[14]?.value)
+                        upImgs.push(i14)
+                    }
+                    // setTimeout(async () => {
+                    //     if (upImgs.length > 0) {
                             onApproveAll(upImgs)
                             // props.navigation.goBack();
                             setActive(false)
                             // getAlbums()
-                        }
-                        else
+                        // }
+                        // else
                             setActive(false)
-                    }, 3000 * imgs?.length);
+                    // }, 3000 * imgs?.length);
                 }
             })
         }
@@ -124,7 +186,6 @@ const UserQr = (props) => {
         const res = await filterCollection("Recieved", heading.trim(), value, "albumName", "owner");
         // console.log("Find approve item", res);
         if (res.length < 1) {
-            setOpen(true); 
             scroll.current.scrollToEnd({ animated: true });
             await saveData("Recieved", '', {
                 albumName: heading,
@@ -191,14 +252,14 @@ const UserQr = (props) => {
                         </TouchableOpacity>
                     </View>
                     {open &&
-                        <View style={{alignSelf: 'center',width:'100%'}}>
+                        <View style={{ alignSelf: 'center', width: '100%' }}>
                             <View
-                                style={{alignSelf: 'center',}}
-                                >
-                            <QRCode
-                                value={email}
-                                size={200}
-                            />
+                                style={{ alignSelf: 'center', }}
+                            >
+                                <QRCode
+                                    value={email}
+                                    size={200}
+                                />
                             </View>
                             <View style={{ ...styles.row, justifyContent: 'space-around' }}>
                                 <TouchableOpacity onPress={() => { props.navigation.navigate("Scanner") }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5) }}>
@@ -216,7 +277,7 @@ const UserQr = (props) => {
                                 <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: '#ffff' }}>Invite People on Whatsapp</Text>
                             </TouchableOpacity>
                         </View>
-                     } 
+                    }
                 </View>
                 {active &&
                     <View style={{ width: '100%', height: "100%", backgroundColor: 'transparent', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', position: 'absolute', }}>
