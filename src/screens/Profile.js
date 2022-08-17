@@ -41,6 +41,12 @@ function Profile(props) {
         await AsyncStorage.removeItem("User")
         await AsyncStorage.removeItem("Admin")
         await AsyncStorage.removeItem("id");
+        const goo = await AsyncStorage.getItem("google");
+        if (goo != null) {
+          console.log('google');
+          Google?.onGoogleLogout()
+          await AsyncStorage.removeItem("google");
+        }
         props.navigation.dispatch(
           CommonActions.reset({
             index: 0,

@@ -99,8 +99,8 @@ const UserQr = (props) => {
             AlertService.confirm("Upload Pictures?").then(async (res) => {
                 if (res) {
                     setOpen(true);
+                    scroll.current.scrollToEnd({ animated: true });
                     const value = await AsyncStorage.getItem("User")
-                    setActive(true)
                     let upImgs = []
                     if (imgs?.length > 0) {
                         let i0 = await uploadFile(imgs[0]?.uri, imgs[0]?.value)
@@ -163,16 +163,7 @@ const UserQr = (props) => {
                         let i14 = await uploadFile(imgs[14]?.uri, imgs[14]?.value)
                         upImgs.push(i14)
                     }
-                    // setTimeout(async () => {
-                    //     if (upImgs.length > 0) {
                     onApproveAll(upImgs)
-                    // props.navigation.goBack();
-                    setActive(false)
-                    // getAlbums()
-                    // }
-                    // else
-                    setActive(false)
-                    // }, 3000 * imgs?.length);
                 }
             })
         }
@@ -185,9 +176,7 @@ const UserQr = (props) => {
     async function onApproveAll(item) {
         const value = await AsyncStorage.getItem("User")
         const res = await filterCollection("Recieved", heading.trim(), value, "albumName", "owner");
-        // console.log("Find approve item", res);
         if (res.length < 1) {
-            scroll.current.scrollToEnd({ animated: true });
             await saveData("Recieved", '', {
                 albumName: heading,
                 owner: value,
@@ -213,7 +202,7 @@ const UserQr = (props) => {
         // await buildLink()
         let url = 'whatsapp://send?text=' + e;
         await Linking.openURL(url)
-      };
+    };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView ref={scroll}
@@ -222,7 +211,7 @@ const UserQr = (props) => {
                 showsVerticalScrollIndicator={false}
             >
                 <Header title="Q R" style={{}} onPress={() => { props.navigation.goBack() }} />
-                <Text style={{ ...styles.emailTxt, paddingLeft: WP(5), fontSize: 12 ,marginTop:HP(3)}}>STEP 01:<Text style={{color:'red'}}>     IMPORTANT</Text> </Text>
+                <Text style={{ ...styles.emailTxt, paddingLeft: WP(5), fontSize: 12, marginTop: HP(3) }}>STEP 01:<Text style={{ color: 'red' }}>     IMPORTANT</Text> </Text>
                 <TouchableOpacity onPress={() => { onShareW('https://sharingapp.page.link/') }} style={{ ...styles.row, paddingVertical: HP(1.3), marginVertical: HP(1), paddingHorizontal: WP(5), backgroundColor: 'green', alignSelf: 'center', borderRadius: WP(2), width: WP(70) }}>
                     <IconFonAw name='whatsapp' color={"#fff"} size={25} />
                     <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 12, color: '#fff', textAlign: 'center' }}>Share this App with Family

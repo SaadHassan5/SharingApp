@@ -17,6 +17,8 @@ import { filterCollection } from "../Auth/fire";
 import IconFb from "react-native-vector-icons/AntDesign"
 import fontFamily from "../assets/config/fontFamily";
 import { onFacebookButtonPress } from "../Auth/fbAuth";
+import { GoogleActions } from "../Auth/googleLogin";
+
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -47,10 +49,16 @@ export default function LoginScreen(props) {
         <View style={styles.logoContainer}>
           <Image style={{width:WP(70),height:WP(20)}} source={require("../assets/images/logo/logo.png")} />
         </View>
-        <TouchableOpacity onPress={async()=>{setActive(true);await onFacebookButtonPress(props);setActive(false)}} style={{flexDirection:'row',alignItems:'center',paddingHorizontal:WP(5),alignSelf:'center',paddingVertical:HP(2)}}>
-              <Text style={{fontFamily:fontFamily.bold,color:palette.blackGray,fontSize:24}}>Login with </Text>
-              <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={35}/>
-            </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center',alignSelf:"center" }}>
+          {/* <TouchableOpacity onPress={async () => { setActive(true); await onFacebookButtonPress(props); setActive(false) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
+            <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray, fontSize: 18 }}>Login with </Text>
+            <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={25} />
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={async () => {  await GoogleActions.onGoogleButtonPressed(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
+            <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray, fontSize: 18 }}>Login with </Text>
+            <IconFb name="google" color={palette.lighBlueBtnTitle} size={25} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.formContainer}>
 
           <AppForm

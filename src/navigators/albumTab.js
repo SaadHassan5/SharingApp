@@ -22,7 +22,7 @@ import AlbumQr from '../screens/AlbumQr';
 
 const ScannerButton = (prop) => {
   return (
-    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: 'black', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
+    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
       <IconMat name='qr-code-scanner' color={colors.primary} size={30} />
     </TouchableOpacity>
   )
@@ -37,13 +37,13 @@ export function AlbumTab(props) {
         headerShown: false,
         // tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#fff",
+          backgroundColor: palette?.lighBlueBtnTitle,
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           // borderWidth: 1,
-          borderColor: 'black',
+          borderColor: '#fff',
           paddingLeft: 20, paddingRight: 20,
-          // height: HP(9),
+          height: HP(9),
           position: 'absolute',
           bottom: 0
         }
@@ -59,8 +59,8 @@ export function AlbumTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconMat name={'photo'} size={20} color={focused ? "black" : "grey"} />
-              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Photos</Text>
+              <IconMat name={'photo'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Photos</Text>
             </View>
           )
         }}
@@ -73,8 +73,8 @@ export function AlbumTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconMat name={'qr-code'} size={20} color={focused ? "black" : "grey"} />
-              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>QR</Text>
+              <IconMat name={'qr-code'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>QR</Text>
             </View>
           )
         }}
@@ -87,8 +87,8 @@ export function AlbumTab(props) {
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size, focused }) => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconMatComunity name={'download'} size={20} color={focused ? "black" : "grey"} />
-              <Text style={{ color: focused ? "black" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>RecieveImages</Text>
+              <IconMatComunity name={'download'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>RecieveImages</Text>
             </View>
           )
         }}

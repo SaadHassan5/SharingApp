@@ -16,6 +16,7 @@ import { FireAuth } from "../Auth/socialAuth";
 import fontFamily from "../assets/config/fontFamily";
 import IconFb from "react-native-vector-icons/AntDesign"
 import { onFacebookButtonPress } from "../Auth/fbAuth";
+import { GoogleActions } from "../Auth/googleLogin";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -55,13 +56,13 @@ export default function RegisterScreen(props) {
           setActive(false)
           props.navigation.goBack();
           const link = await AsyncStorage.getItem("Link");
-          if(link!=null){
+          if (link != null) {
             console.log(link);
             let sp = link.split('/')
             props.navigation?.replace("UploadImageScreen", { email: sp[sp?.length - 4], heading: sp[sp?.length - 3], view: sp[sp?.length - 2] })
           }
           else
-          props.navigation.replace('UserTab')
+            props.navigation.replace('UserTab')
         }
         else
           setActive(false)
@@ -105,10 +106,16 @@ export default function RegisterScreen(props) {
         <View style={styles.logoContainer}>
           <Image style={{ width: WP(70), height: WP(20) }} source={require("../assets/images/logo/logo.png")} />
         </View>
-        <TouchableOpacity onPress={() => { setActive(true); onFacebookButtonPress(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
-          <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray, fontSize: 24 }}>Register with </Text>
-          <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={35} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: "center" }}>
+          {/* <TouchableOpacity onPress={async () => { setActive(true); await onFacebookButtonPress(props); setActive(false) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
+            <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray, fontSize: 18 }}>Login with </Text>
+            <IconFb name="facebook-square" color={palette.lighBlueBtnTitle} size={25} />
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={async () => { await GoogleActions.onGoogleButtonPressed(props) }} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: WP(5), alignSelf: 'center', paddingVertical: HP(2) }}>
+            <Text style={{ fontFamily: fontFamily.bold, color: palette.blackGray, fontSize: 18 }}>Login with </Text>
+            <IconFb name="google" color={palette.lighBlueBtnTitle} size={25} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.formContainer}>
           <AppForm
             initialValues={{ name: "", email: "", password: "" }}

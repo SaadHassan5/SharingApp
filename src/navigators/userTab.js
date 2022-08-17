@@ -81,7 +81,7 @@ export function UserTab(props) {
         tabBarShowLabel: false,
         tabBarButton: () => (<ScannerButton {...props} />),
       }} /> */}
-      <Tab.Screen name="Profile" component={Profile}
+      {/* <Tab.Screen name="Profile" component={Profile}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -94,7 +94,7 @@ export function UserTab(props) {
             </View>
           )
         }}
-      />
+      /> */}
       <Tab.Screen name="Revieve" component={AllRecievePhotos}
         options={{
           // tabBarLabel: true,
@@ -109,7 +109,7 @@ export function UserTab(props) {
           )
         }}
       />
-      <Tab.Screen name="Friends" component={Friends}
+      {/* <Tab.Screen name="Friends" component={Friends}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -122,7 +122,7 @@ export function UserTab(props) {
             </View>
           )
         }}
-      />
+      /> */}
 
 
     </Tab.Navigator >

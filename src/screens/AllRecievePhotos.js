@@ -61,19 +61,23 @@ function AllRecievePhotos(props) {
               <View>
                 {item?.imgs?.length > 0 &&
                   <View>
-                    <Text style={{ ...styles.titleTxt, paddingVertical: HP(3) }}>{item?.albumName}</Text>
-                    <FlatList
-                      // numColumns={1}
-                      horizontal
-                      data={item?.imgs}
-                      showsHorizontalScrollIndicator={false}
-                      keyExtractor={item => item.id}
-                      renderItem={({ item }) =>
-                        <Pressable onPress={() => { props.navigation.navigate("AlbumTab", item) }}>
-                          <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
-                        </Pressable>
-                      } />
-
+                    <Pressable onPress={() => { props.navigation.navigate("AlbumTab", item) }}>
+                      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingRight:WP(5) ,paddingVertical: HP(3)}}>
+                        <Text style={{ ...styles.titleTxt}}>{item?.albumName}</Text>
+                        <Text style={{ ...styles.titleTxt,fontSize:13,color:palette.labelGray }}>Click to Open</Text>
+                      </View>
+                      <FlatList
+                        // numColumns={1}
+                        horizontal
+                        data={item?.imgs}
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) =>
+                          <View onPress={() => { console.log(item); }}>
+                            <Image source={{ uri: item }} style={{ width: WP(40), height: WP(40), marginRight: WP(5) }} />
+                          </View>
+                        } />
+                    </Pressable>
                   </View>
                 }
               </View>

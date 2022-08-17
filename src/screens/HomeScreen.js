@@ -18,6 +18,9 @@ import { colors } from '../theme';
 import ArrowRight from '../svg/ArrowRight';
 import { color } from 'react-native-reanimated';
 import AppText from '../components/AppText';
+import { GoogleActions } from '../Auth/googleLogin';
+import AlertService from '../Services/alertService';
+import { CommonActions } from '@react-navigation/native';
 
 const HomeScreen = (props) => {
     const [user, setUser] = useState({})
@@ -86,9 +89,32 @@ const HomeScreen = (props) => {
         })
         await getRecievedAlbums();
     }
+    const handleSignOut = async () => {
+        AlertService.confirm("Are you sure you want to Logout?").then(async (res) => {
+          if (res) {
+            await AsyncStorage.removeItem("User")
+            await AsyncStorage.removeItem("Admin")
+            await AsyncStorage.removeItem("id");
+            const goo = await AsyncStorage.getItem("google");
+            if (goo != null) {
+              console.log('google');
+              GoogleActions?.onGoogleLogout()
+              await AsyncStorage.removeItem("google");
+            }
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  { name: 'Splash' },
+                ]
+              })
+            );
+          }
+        })
+      }
     return (
         <SafeAreaView style={{ ...GlobalStyles.container, backgroundColor: '#fff' }}>
-            <Header title={"Home"} goBack={false} />
+            <Header title={"Home"} goBack={false} logout={() => { handleSignOut() }}/>
             <ScrollView
                 style={{ flexGrow: 1, backgroundColor: "#fff" }}
                 contentContainerStyle={{ paddingVertical: HP(2), paddingBottom: HP(10), paddingHorizontal: WP(5) }}
