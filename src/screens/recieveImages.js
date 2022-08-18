@@ -37,7 +37,7 @@ function RecieveImages(props) {
         // console.log("USSS",props?.user);
         const value = await AsyncStorage.getItem('User')
         console.log("email", value);
-        const res = await filterCollectionTriple("Albums", value, false, props?.route?.params?.albumName, "owner", "approve", "heading");
+        const res = await filterCollectionTriple("Albums", value, false, props?.route?.params?.albumName, "owner", "reject", "heading");
         console.log(res);
         setAllAlbums(res)
     }

@@ -2,8 +2,6 @@ import * as React from 'react';
 // import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconEntypo from "react-native-vector-icons/Entypo"
-import Icons from "react-native-vector-icons/MaterialIcons"
-import IconCom from "react-native-vector-icons/Foundation"
 import IconPost from "react-native-vector-icons/MaterialCommunityIcons"
 import { palette } from '../assets/config';
 import UserAdmin from '../screens/UsersAdmin';
@@ -86,6 +84,7 @@ export function TabNavigator({ navigation }) {
           )
         }}
       />
+     
 
     </Tab.Navigator >
   );

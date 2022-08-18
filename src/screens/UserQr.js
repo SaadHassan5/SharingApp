@@ -208,6 +208,7 @@ const UserQr = (props) => {
                 reject: false,
                 feature: false,
             })
+            toastPrompt("Uploaded")
             setImgs([]);
             setHeading("")
         }

@@ -17,6 +17,7 @@ import Profile from '../screens/Profile';
 import RecieveImages from '../screens/recieveImages';
 import Friends from '../screens/Friends';
 import AllRecievePhotos from '../screens/AllRecievePhotos';
+import SearchAlbum from '../screens/SearchAlbum';
 
 const ScannerButton = (prop) => {
   return (
@@ -105,6 +106,20 @@ export function UserTab(props) {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <IconEntypo name={'download'} size={20} color={focused ? "#fff" : "grey"} />
               <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Recieve</Text>
+            </View>
+          )
+        }}
+      />
+       <Tab.Screen name="Search" component={SearchAlbum}
+        options={{
+          // tabBarLabel: true,
+          // title: 'Group',
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <IconMat name={'search'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Search</Text>
             </View>
           )
         }}

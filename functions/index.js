@@ -70,7 +70,7 @@ exports.sendFollowingNotification = functions.firestore
             console.log('error in Comment Notification', error);
         }
     });
-    exports.sendLikeNotification = functions.firestore
+exports.sendLikeNotification = functions.firestore
     .document('Recieved/{id}')
     .onWrite(async (change, context) => {
         try {
@@ -82,14 +82,14 @@ exports.sendFollowingNotification = functions.firestore
             // console.log("context",context);
             // console.log("Doc",docId);
             // let followerId = after.followings.pop();
-            if (after?.likes>before?.likes) {
+            if (after?.likes > before?.likes) {
                 let ownerAlbum = await getData('Users', after?.owner);
-            //     console.log("OwnerAlbum", ownerAlbum);
+                //     console.log("OwnerAlbum", ownerAlbum);
                 if (ownerAlbum?.token) {
                     const payload = {
                         notification: {
                             title: `Like <3`,
-                            body: `${after?.likedBy[after?.likedBy?.length-1]?.name} liked ${after?.albumName}`,
+                            body: `${after?.likedBy[after?.likedBy?.length - 1]?.name} liked ${after?.albumName}`,
                             sound: 'default',
                         },
                     };
@@ -109,7 +109,81 @@ exports.sendFollowingNotification = functions.firestore
             console.log('error in Comment Notification', error);
         }
     });
+exports.sendOwnerNotification = functions.firestore
+    .document('Albums/{id}')
+    .onWrite(async (change, context) => {
+        try {
+            let after = change.after.data();
+            let before = change.before.data();
+            let docId = context.params.id;
+            console.log("After", after);
+            console.log("Before", before);
+            // console.log("context",context);
+            // console.log("Doc",docId);
+            // let followerId = after.followings.pop();
+            if (!before) {
+                let ownerAlbum = await getData('Users', after?.owner);
+                //     console.log("OwnerAlbum", ownerAlbum);
+                if (ownerAlbum?.token) {
+                    const payload = {
+                        notification: {
+                            title: `${after?.heading}`,
+                            body: `${after?.sender} added photos`,
+                            sound: 'default',
+                        },
+                    };
+                    const options = {
+                        priority: 'high',
+                        timeToLive: 60 * 60 * 24,
+                    };
+                    admin
+                        .messaging()
+                        .sendToDevice(ownerAlbum?.token, payload, options)
+                        .then(reponse => {
+                            console.log('Send Album OWner Notification ');
+                        });
+                }
+            }
+        } catch (error) {
+            console.log('error in Owner Notification', error);
+        }
+    });
+exports.sendApprovalNotification = functions.firestore
+    .document('Albums/{id}')
+    .onWrite(async (change, context) => {
+        try {
+            let after = change.after.data();
+            let before = change.before.data();
+            console.log("After", after);
+            console.log("Before", before);
+            if (after?.imgs?.length < before?.imgs?.length) {
 
+                let ownerAlbum = await getData('Users', after?.sender);
+                //     console.log("OwnerAlbum", ownerAlbum);
+                if (ownerAlbum?.token) {
+                    const payload = {
+                        notification: {
+                            title: `${after?.heading}`,
+                            body: `${after?.owner} approved your photos`,
+                            sound: 'default',
+                        },
+                    };
+                    const options = {
+                        priority: 'high',
+                        timeToLive: 60 * 60 * 24,
+                    };
+                    admin
+                        .messaging()
+                        .sendToDevice(ownerAlbum?.token, payload, options)
+                        .then(reponse => {
+                            console.log('Send Album  Notification ');
+                        });
+                }
+            }
+        } catch (error) {
+            console.log('error in Owner Notification', error);
+        }
+    });
 exports.helloWorld = functions.https.onRequest((request, response) => {
     functions.logger.info("Hello logs!", { structuredData: true });
     response.send("Hello from Firebase!");
