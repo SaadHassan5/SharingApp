@@ -37,7 +37,7 @@ export function AlbumTab(props) {
         headerShown: false,
         // tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: palette?.lighBlueBtnTitle,
+          backgroundColor: "pink",
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           // borderWidth: 1,

@@ -240,8 +240,8 @@ const UserQr = (props) => {
                 </TouchableOpacity>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ width: "90%", marginVertical: HP(5) }}>
-                        <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} />
-                        <AppTextInput value={keyword} placeholderText={"Enter Unique Keywords"} onChange={(e) => { setKeyword(e) }} />
+                        {/* <AppTextInput value={heading} placeholderText={"Enter Heading"} onChange={(e) => { setHeading(e); setEmail(props?.user?.email + "/" + e.trim() + '/' + check) }} /> */}
+                        <AppTextInput value={keyword} placeholderText={"Enter Unique Keywords"} onChange={(e) => {setKeyword(e?.trim()) }} />
 
                         <TouchableOpacity onPress={() => { onBrowse() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5), backgroundColor: palette.lighBlueBtnTitle, alignSelf: 'center', marginTop: HP(2) }}>
                             <IconFoundation name='upload' color={"#fff"} size={22} />
