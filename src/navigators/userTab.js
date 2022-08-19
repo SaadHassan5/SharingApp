@@ -21,7 +21,7 @@ import SearchAlbum from '../screens/SearchAlbum';
 
 const ScannerButton = (prop) => {
   return (
-    <TouchableOpacity onPress={()=>{prop.navigation?.navigate('UserQr')}} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5),justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:palette.lighterGrey}}>
+    <TouchableOpacity onPress={() => { prop.navigation?.navigate('UserQr') }} style={{ backgroundColor: '#fff', width: WP(20), height: WP(20), borderRadius: WP(10), marginTop: -HP(5), justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: palette.lighterGrey }}>
       <IconMat name='qr-code-scanner' color={colors.primary} size={30} />
     </TouchableOpacity>
   )
@@ -49,20 +49,6 @@ export function UserTab(props) {
       }}
 
     >
-    <Tab.Screen name="UserQr" component={UserQr}
-      options={{
-        // tabBarLabel: true,
-        // title: 'Group',
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarIcon: ({ color, size, focused }) => (
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
-            <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
-          </View>
-        )
-      }}
-    />
       <Tab.Screen name="HomeScreen" component={HomeScreen}
         options={{
           // tabBarLabel: true,
@@ -77,12 +63,27 @@ export function UserTab(props) {
           )
         }}
       />
+      <Tab.Screen name="UserQr" component={UserQr}
+        options={{
+          // tabBarLabel: true,
+          // title: 'Group',
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <IconFoundation name={'upload'} size={20} color={focused ? "#fff" : "grey"} />
+              <Text style={{ color: focused ? "#fff" : "grey", fontFamily: fontFamily.bold, fontSize: 12 }}>Upload</Text>
+            </View>
+          )
+        }}
+      />
+
       {/* <Tab.Screen name="UserQr" component={UserQr} options={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarButton: () => (<ScannerButton {...props} />),
       }} /> */}
-      {/* <Tab.Screen name="Profile" component={Profile}
+      <Tab.Screen name="Profile" component={Profile}
         options={{
           // tabBarLabel: true,
           // title: 'Group',
@@ -95,7 +96,7 @@ export function UserTab(props) {
             </View>
           )
         }}
-      /> */}
+      />
       <Tab.Screen name="Revieve" component={AllRecievePhotos}
         options={{
           // tabBarLabel: true,
@@ -110,7 +111,7 @@ export function UserTab(props) {
           )
         }}
       />
-       <Tab.Screen name="Search" component={SearchAlbum}
+      <Tab.Screen name="Search" component={SearchAlbum}
         options={{
           // tabBarLabel: true,
           // title: 'Group',

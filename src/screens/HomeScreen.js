@@ -11,7 +11,6 @@ import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
 import fontFamily from '../assets/config/fontFamily';
 import { HP, WP } from '../assets/config';
-import ShareModal from '../components/shareModal';
 import IconMatCom from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { colors } from '../theme';
@@ -21,6 +20,7 @@ import AppText from '../components/AppText';
 import { GoogleActions } from '../Auth/googleLogin';
 import AlertService from '../Services/alertService';
 import { CommonActions } from '@react-navigation/native';
+// import ShareModal from './shareModal';
 
 const HomeScreen = (props) => {
     const [user, setUser] = useState({})
@@ -163,7 +163,8 @@ const HomeScreen = (props) => {
                     />
                 </View>
             </ScrollView>
-            <ShareModal mod={mod} onShare={onShare} onPress={() => { setMod(false) }} />
+            {/* <ShareModal mod={mod} onShare={onShare} onPress={() => { setMod(false) }} /> */}
+
         </SafeAreaView>
     )
 }

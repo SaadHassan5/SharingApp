@@ -11,7 +11,6 @@ import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
 import fontFamily from '../assets/config/fontFamily';
 import { HP, palette, WP } from '../assets/config';
-import ShareModal from '../components/shareModal';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { colors } from '../theme';
 import AlertService from '../Services/alertService';

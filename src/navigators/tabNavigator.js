@@ -3,9 +3,11 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconEntypo from "react-native-vector-icons/Entypo"
 import IconPost from "react-native-vector-icons/MaterialCommunityIcons"
+import Ionicons from "react-native-vector-icons/Ionicons"
 import { palette } from '../assets/config';
 import UserAdmin from '../screens/UsersAdmin';
 import AdminAlbum from '../screens/AdminAlbums';
+import AdminNotify from '../screens/AdminNotify';
 
 const Tab = createBottomTabNavigator();
 
@@ -81,6 +83,15 @@ export function TabNavigator({ navigation }) {
           title: 'Users',
           tabBarIcon: ({ color, size, focused }) => (
             <IconEntypo name={'users'} size={20} color={focused?palette.lighBlueBtnTitle:"grey"}/>
+          )
+        }}
+      />
+      <Tab.Screen name="AdminNotify" component={AdminNotify} 
+        options={{
+          // tabBarLabel: true,
+          title: 'AdminNotify',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={'notifications'} size={20} color={focused?palette.lighBlueBtnTitle:"grey"}/>
           )
         }}
       />

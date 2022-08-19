@@ -18,6 +18,19 @@ const getData = (collection, doc) => {
             }
         });
 };
+const getAllData = async (collection) => {
+    try {
+        const ref = db.collection(collection);
+        const querySnapshot = await ref?.get();
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data?.push(documentSnapshot.data());
+        });
+        return data;
+    } catch (error) {
+        throw new Error(SERVICES._returnError(error));
+    }
+};
 const filterCollections = async (collection, key, op, value) => {
     try {
         const ref = db.collection(collection);
@@ -182,6 +195,43 @@ exports.sendApprovalNotification = functions.firestore
             }
         } catch (error) {
             console.log('error in Owner Notification', error);
+        }
+    });
+    exports.sendManualNotification = functions.firestore
+    .document('ManualNotifications/{id}')
+    .onWrite(async (change, context) => {
+        try {
+            let after = change.after.data();
+            let before = change.before.data();
+            console.log("After", after);
+            console.log("Before", before);
+            let allUsers = await getAllData("Users");
+                console.log("All", allUsers?.length);
+            const payload = {
+                notification: {
+                    title: `${after?.title}`,
+                    body: `${after?.body}`,
+                    sound: 'default',
+                },
+            };
+            const options = {
+                priority: 'high',
+                timeToLive: 60 * 60 * 24,
+            };
+            allUsers?.map(i => {
+                    if (i?.token) {
+                    admin
+                        .messaging()
+                        .sendToDevice(i?.token, payload, options)
+                        .then(reponse => {
+                            console.log('Send Admin Notification ');
+                        });
+                    }
+                })
+
+
+        } catch (error) {
+            console.log('error in Comment Notification', error);
         }
     });
 exports.helloWorld = functions.https.onRequest((request, response) => {
