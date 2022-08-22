@@ -20,20 +20,17 @@ import AppText from '../components/AppText';
 import { GoogleActions } from '../Auth/googleLogin';
 import AlertService from '../Services/alertService';
 import { CommonActions } from '@react-navigation/native';
-// import ShareModal from './shareModal';
+import { ShareModal } from '../assets/components/Modal/ShareModal';
 
 const HomeScreen = (props) => {
     const [user, setUser] = useState({})
     const [albums, setAlbums] = useState([])
     const [albumsR, setAlbumsR] = useState([])
     const [add, setAdd] = useState(false)
-    const [mod, setMod] = useState(false)
+    const [mod, setMod] = useState(true)
     const [active, setActive] = useState(false)
     const [albumName, setAlbumName] = useState('')
     useEffect(() => {
-        setTimeout(() => {
-            setMod(true)
-        }, 1000);
         getUser();
         // getCreatedAlbums();
         getRecievedAlbums()
@@ -43,30 +40,14 @@ const HomeScreen = (props) => {
         console.log(res);
         setAlbumsR(res)
     }
-    const onShare = async () => {
-        let url = 'whatsapp://send?text=' + 'https://sharingapp.page.link/moonsot';
+    const onShare = async (e) => {
+        let url = 'whatsapp://send?text=' + e;
         Linking.openURL(url)
-    }
-    const getCreatedAlbums = async () => {
-        const value = await AsyncStorage.getItem("User")
-        const res = await filterCollectionSingle("Created", value.trim(), "owner")
-        console.log("Albums", res, value);
-        setAlbums(res);
     }
     const getUser = async () => {
         const value = await AsyncStorage.getItem("User")
         const res = await getData("Users", value);
         props.getUser(res)
-    }
-    const onSave = async () => {
-        const value = await AsyncStorage.getItem("User")
-        await saveData("Created", '', {
-            owner: value,
-            albumName: albumName,
-            imgs: [],
-        })
-        setAdd(false);
-        // getCreatedAlbums();
     }
     const onLike = async (item) => {
         let sub = [...item?.likedBy]
@@ -91,30 +72,30 @@ const HomeScreen = (props) => {
     }
     const handleSignOut = async () => {
         AlertService.confirm("Are you sure you want to Logout?").then(async (res) => {
-          if (res) {
-            await AsyncStorage.removeItem("User")
-            await AsyncStorage.removeItem("Admin")
-            await AsyncStorage.removeItem("id");
-            const goo = await AsyncStorage.getItem("google");
-            if (goo != null) {
-              console.log('google');
-              GoogleActions?.onGoogleLogout()
-              await AsyncStorage.removeItem("google");
+            if (res) {
+                await AsyncStorage.removeItem("User")
+                await AsyncStorage.removeItem("Admin")
+                await AsyncStorage.removeItem("id");
+                const goo = await AsyncStorage.getItem("google");
+                if (goo != null) {
+                    console.log('google');
+                    GoogleActions?.onGoogleLogout()
+                    await AsyncStorage.removeItem("google");
+                }
+                props.navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            { name: 'Splash' },
+                        ]
+                    })
+                );
             }
-            props.navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [
-                  { name: 'Splash' },
-                ]
-              })
-            );
-          }
         })
-      }
+    }
     return (
         <SafeAreaView style={{ ...GlobalStyles.container, backgroundColor: '#fff' }}>
-            <Header title={"Home"} goBack={false} logout={() => { handleSignOut() }}/>
+            <Header title={"Home"} goBack={false} logout={() => { handleSignOut() }} />
             <ScrollView
                 style={{ flexGrow: 1, backgroundColor: "#fff" }}
                 contentContainerStyle={{ paddingVertical: HP(2), paddingBottom: HP(10), paddingHorizontal: WP(5) }}
@@ -145,16 +126,16 @@ const HomeScreen = (props) => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: HP(0) }}>
                                     <View style={{ ...GlobalStyles.row }}>
                                         {item?.likedBy?.find(e => e?.email == props?.user?.email) ?
-                                            <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(2)}} onPress={() => { unLike(item) }}>
+                                            <TouchableOpacity style={{ paddingVertical: HP(2), paddingHorizontal: WP(2) }} onPress={() => { unLike(item) }}>
                                                 <AntDesign name='like1' size={25} color={colors.primary} />
                                             </TouchableOpacity>
                                             :
-                                            <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(2)}} onPress={() => { onLike(item) }}>
+                                            <TouchableOpacity style={{ paddingVertical: HP(2), paddingHorizontal: WP(2) }} onPress={() => { onLike(item) }}>
                                                 <AntDesign name='like2' size={25} color={colors.primary} />
                                             </TouchableOpacity>}
-                                        <AppText style={{  color: colors.primary, fontFamily: fontFamily.medium }}>{item?.likes}</AppText>
+                                        <AppText style={{ color: colors.primary, fontFamily: fontFamily.medium }}>{item?.likes}</AppText>
                                     </View>
-                                    <TouchableOpacity style={{paddingVertical:HP(2),paddingHorizontal:WP(5)}} onPress={() => { props.navigation.navigate("AlbumDetail", item) }}>
+                                    <TouchableOpacity style={{ paddingVertical: HP(2), paddingHorizontal: WP(5) }} onPress={() => { props.navigation.navigate("AlbumDetail", item) }}>
                                         <IconMatCom name='comment' size={25} color={colors.primary} />
                                     </TouchableOpacity>
                                 </View>
@@ -163,8 +144,7 @@ const HomeScreen = (props) => {
                     />
                 </View>
             </ScrollView>
-            {/* <ShareModal mod={mod} onShare={onShare} onPress={() => { setMod(false) }} /> */}
-
+            <ShareModal mod={mod} setMod={setMod} onPress={()=>{setMod(false)}} onShare={()=>{onShare("https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.fammm.fammm")}} />
         </SafeAreaView>
     )
 }

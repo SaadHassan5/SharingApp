@@ -33,6 +33,18 @@ export async function getAllOfCollection(collection: any) {
   let querySnapshot = await firestore().collection(collection).get();
   querySnapshot.forEach(function (doc) {
     if (doc.exists) {
+      data.push({ ...doc?.data(), id: doc?.ref?.id });
+    } else {
+      console.log('No document found!');
+    }
+  });
+  return data;
+}
+export async function getAllOfCollectionOrder(collection: any,orderKey) {
+  let data: any[] = [];
+  let querySnapshot = await firestore().collection(collection).orderBy(orderKey, 'asc').get();
+  querySnapshot.forEach(function (doc) {
+    if (doc.exists) {
       // console.log("DOCCC",{...doc?.data(),id:doc?.ref?.id});
       // let n={...doc?.data(),id:doc?.ref?.id}
       data.push({ ...doc?.data(), id: doc?.ref?.id });
@@ -101,6 +113,31 @@ export async function filterCollectionSingle(collection: any,value,key) {
   }
  
 }
+export async function deleteData(collection: any, doc: any, ) {
+  await  firestore()
+    .collection(collection)
+    .doc(doc)
+    .delete()
+    .then(() => {
+      console.log('Data deleted!');
+    });
+}
+export async function filterCollectionOP(collection: any, value ,key, op,keyOr:'day',methodOr:'asc') {
+  try {
+    // "array-contains"
+    let data: any[] = [];
+    let querySnapshot = await firestore().collection(collection).where(key,op, value).get();
+    querySnapshot.forEach(function (doc) {
+      data.push({ ...doc?.data(), id: doc?.ref?.id });
+    });
+    console.log('querySnapshot:', data);
+
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+
+}
 export function getData(collection: any, doc: any, objectKey?: any) {
   if (!objectKey) {
     return firestore()
@@ -165,26 +202,6 @@ export async function saveNestedData(collection: any, doc: any,collection1, json
     });
   //console.log("Document successfully written!");
 }
-export async function getSpecialties(collection: any, doc: any) {
-  // console.log('ayayay');
-  let temp = [];
-  return firestore()
-    .collection(collection)
-    .doc(doc)
-    .get()
-    .then(function (doc) {
-      if (doc.exists) {
-        // console.log('mila');
-        // console.log(doc.data());
-        // temp=[doc.data().selected]
-        return doc?.data()
-      } else {
-        return false;
-      }
-    });
-  // return temp;
-  // return data;
-}
 export async function getDonors() {
   await firestore().collection('Users').where('BloodDonar', '!=', true).get().then((users) => {
     console.log(users);
@@ -204,7 +221,7 @@ export async function uploadImageToStorage(path, imageName) {
     console.log('Image uploaded to the bucket!', res);
   }).catch((e) => console.log('uploading image error => ', e));
 }
-export async function uploadFile(file, fileName?,doc?) {
+export async function uploadFile(file, fileName?,doc) {
 console.log("UPLOAAAAAAAAAD");
 
   return new Promise(async (resolve, reject) => {

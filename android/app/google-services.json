@@ -31,11 +31,11 @@
           }
         },
         {
-          "client_id": "802060354200-qou6t5it6n3vdvgvjh0a6d02ku88ggvg.apps.googleusercontent.com",
+          "client_id": "802060354200-mcl0ui35b98l9nf8v1l5upjvgs0kbbus.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fammm.fammm",
-            "certificate_hash": "8bf381fe037024a0a1294392896a03d15b3e9cc2"
+            "certificate_hash": "60443b02a09c74b1ec00ed3fb07f2d1d592e88b9"
           }
         },
         {
@@ -67,6 +67,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "802060354200-abflsjhej2bs58s84a0i8r3b94aegbab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactfoodf",
+            "certificate_hash": "4f5a5ec6278544105809e82e0a1e1687924a95bd"
+          }
+        },
+        {
+          "client_id": "802060354200-gv52e28pl1f214le4hqgg34q662v9hs3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactfoodf",
+            "certificate_hash": "8bf381fe037024a0a1294392896a03d15b3e9cc2"
+          }
+        },
+        {
+          "client_id": "802060354200-lf41n75f8j530r8dj8k169903e14u65k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactfoodf",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "802060354200-5psgcv928rdjpp1rsqs7np5aba79ldm7.apps.googleusercontent.com",
           "client_type": 3

@@ -3,6 +3,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { getData, saveData } from './fire';
 import { CommonActions } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import auth from '@react-native-firebase/auth';
 
 GoogleSignin.configure({
     scopes: ['email'], // what API you want to access on behalf of the user, default is email and profile
@@ -22,50 +23,54 @@ const onGoogleLogout = async () => {
 }
 async function onGoogleButtonPressed(props) {
     try {
-        // onGoogleLogout ()
-    const token = await messaging().getToken();
+        const fcmToken = await messaging().getToken()
         await GoogleSignin.hasPlayServices();
-        const { user } = await GoogleSignin.signIn();
+        const { idToken, user } = await GoogleSignin.signIn();
+
+        // Create a Google credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         const chk = await getData("Users", user?.email)
-    if (chk) {
-        await saveData("Users", user.email, {
-            profileUri: user?.photo,
-            token:token,
-        })
-    }
-    else {
-        const today = new Date();
-        const currentWeekNumber = today.getWeek();
-        await saveData("Users", user?.email, {
-            email: user?.email,
-            name: user?.givenName+" "+user?.familyName,
-            id: user?.id,
-            profileUri: user?.photo,
-            subscribed: [],
-            imgs: [],
-            subscribedIds: [],
-            history: [],
-            pin: [],
-            showReminder: true,
-            token:token,
-            month: new Date().getMonth(),
-            date: new Date().getDate(),
-            year: new Date().getFullYear(),
-            week: currentWeekNumber,
-        })
-    }
-    await AsyncStorage.setItem('User', user?.email);
-    await AsyncStorage.setItem('id', user?.id);
-    await AsyncStorage.setItem('google','yes');
-    props.navigation.dispatch(
-        CommonActions.reset({
-            index: 0,
-            routes: [
-                { name: 'UserTab' },
-            ]
-        })
-    );
-        console.log("go", user);
+        console.log("GPPPP", user);
+        // Sign-in the user with the credential
+       await auth().signInWithCredential(googleCredential);
+        if (chk) {
+            await saveData("Users", user.email, {
+                profileUri: user?.photo,
+                token: fcmToken,
+            })
+        }
+        else {
+            const today = new Date();
+            const currentWeekNumber = today.getWeek();
+            await saveData("Users", user?.email, {
+                email: user?.email,
+                name: user?.givenName + " " + user?.familyName,
+                id: user?.id,
+                profileUri: user?.photo,
+                subscribed: [],
+                imgs: [],
+                subscribedIds: [],
+                history: [],
+                pin: [],
+                showReminder: true,
+                month: new Date().getMonth(),
+                date: new Date().getDate(),
+                year: new Date().getFullYear(),
+                week: currentWeekNumber,
+                token: fcmToken,
+            })
+        }
+        await AsyncStorage.setItem('User', user?.email);
+        await AsyncStorage.setItem('id', user?.id);
+        await AsyncStorage.setItem('google', 'yes');
+        props.navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'UserTab' },
+                ]
+            })
+        );
     } catch (error) {
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow

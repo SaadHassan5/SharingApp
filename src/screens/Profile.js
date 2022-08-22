@@ -14,6 +14,7 @@ import fontFamily from '../assets/config/fontFamily';
 import { CommonActions } from '@react-navigation/native';
 import AlertService from '../Services/alertService';
 import { filterCollectionSingle } from '../Auth/fire';
+import { GoogleActions } from '../Auth/googleLogin';
 // import AlertService from '../Services/alertService';
 
 function Profile(props) {
@@ -44,7 +45,7 @@ function Profile(props) {
         const goo = await AsyncStorage.getItem("google");
         if (goo != null) {
           console.log('google');
-          Google?.onGoogleLogout()
+          GoogleActions?.onGoogleLogout()
           await AsyncStorage.removeItem("google");
         }
         props.navigation.dispatch(

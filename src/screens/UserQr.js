@@ -233,7 +233,7 @@ const UserQr = (props) => {
             >
                 <Header title="Q R" style={{}} onPress={() => { props.navigation.goBack() }} />
                 <Text style={{ ...styles.emailTxt, paddingLeft: WP(5), fontSize: 12, marginTop: HP(3) }}>STEP 01:<Text style={{ color: 'red' }}>     IMPORTANT</Text> </Text>
-                <TouchableOpacity onPress={() => { onShareW('https://sharingapp.page.link/') }} style={{ ...styles.row, paddingVertical: HP(1.3), marginVertical: HP(1), paddingHorizontal: WP(5), backgroundColor: 'green', alignSelf: 'center', borderRadius: WP(2), width: WP(70) }}>
+                <TouchableOpacity onPress={() => { onShareW('https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.fammm.fammm') }} style={{ ...styles.row, paddingVertical: HP(1.3), marginVertical: HP(1), paddingHorizontal: WP(5), backgroundColor: 'green', alignSelf: 'center', borderRadius: WP(2), width: WP(70) }}>
                     <IconFonAw name='whatsapp' color={"#fff"} size={25} />
                     <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 12, color: '#fff', textAlign: 'center' }}>Share this App with Family
                     </Text>

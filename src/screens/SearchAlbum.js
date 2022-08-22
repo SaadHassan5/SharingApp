@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ActivityIndicator, Linking, Share, View, StyleSheet, TouchableOpacity, Text, SafeAreaView, FlatList, Platform, ToastAndroid, ScrollView, Image } from 'react-native';
+import { ActivityIndicator, Linking, Share, View, StyleSheet, TouchableOpacity, Text, SafeAreaView, FlatList, Platform, ToastAndroid, ScrollView, Image, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { HP, palette, WP } from '../assets/config';
 import { ChangeBackgroundColor, GetUser } from '../root/action';
@@ -15,23 +15,18 @@ import { Checkbox } from 'react-native-paper';
 import IconFoundation from "react-native-vector-icons/Foundation"
 import IconFonAw from "react-native-vector-icons/FontAwesome"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { filterCollection, filterCollectionSingle, saveData, uploadFile, uploadMultiFile } from '../Auth/fire';
+import { filterCollection, filterCollectionSingle, getAllOfCollectionOrder, saveData, uploadFile, uploadMultiFile } from '../Auth/fire';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertService from '../Services/alertService';
 const SearchAlbum = (props) => {
     const [active, setActive] = useState(false)
+    const [chng, setChng] = useState(true)
     const [imgs, setImgs] = useState([])
-    const [open, setOpen] = useState(false)
+    const [allAlbum, setAllAlbum] = useState([])
     const [album, setAlbum] = useState({})
-    const [heading, setHeading] = useState('NewAlbum')
     const [keyword, setKeyword] = useState('')
-    const [check, setCheck] = useState("Public")
     const scroll = useRef();
-    const loginAs = [
-        { key: 'User' },
-        { key: 'Police' },
-        { key: 'Admin' },
-    ]
+
     const toastPrompt = (msg) => {
         if (Platform.OS === 'android') {
             ToastAndroid.show(msg, ToastAndroid.SHORT)
@@ -41,10 +36,15 @@ const SearchAlbum = (props) => {
     }
     useEffect(() => {
         const unsubscribe = props.navigation.addListener('focus', () => {
-
+            getAlbums();
         });
         return unsubscribe;
     }, [props?.navigation])
+    async function getAlbums() {
+        const res = await getAllOfCollectionOrder("Recieved", "keyword");
+        console.log("ORDER=====>", res);
+        setAllAlbum(res)
+    }
     async function onBrowse() {
         const options = {
             mediaType: 'photos',
@@ -162,75 +162,93 @@ const SearchAlbum = (props) => {
             approve: false,
             imgs: [],
             owner: album?.owner,
-            sender:value,
-            imgs:item,
-            reject:false,
+            sender: value,
+            imgs: item,
+            reject: false,
         }
-        console.log("OBJ===>",obj);
+        console.log("OBJ===>", obj);
         await saveData("Albums", '', {
             ...obj
         })
         toastPrompt("Uploaded")
         setImgs([]);
-        setHeading("")
     }
 
-return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-        <ScrollView ref={scroll}
-            style={{ flexGrow: 1, backgroundColor: "#fff" }}
-            contentContainerStyle={{ paddingBottom: HP(10), paddingHorizontal: WP(5) }}
-            showsVerticalScrollIndicator={false}
-        >
-            <Header title="Search Album" style={{}} onPress={() => { props.navigation.goBack() }} />
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: "90%", marginVertical: HP(5) }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <AppTextInput style={{ width: "100%" }} value={keyword} placeholderText={"Enter Keywords"} onChange={(e) => { setKeyword(e) }} />
-                        <TouchableOpacity onPress={() => { onSearch() }} style={{ position: 'absolute', right: 0, paddingHorizontal: WP(5), top: 0, paddingVertical: HP(4) }}>
-                            <Text style={{ ...styles.emailTxt, }}>Search</Text>
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <ScrollView ref={scroll}
+                style={{ flexGrow: 1, backgroundColor: "#fff" }}
+                contentContainerStyle={{ paddingBottom: HP(10), paddingHorizontal: WP(5) }}
+                showsVerticalScrollIndicator={false}
+            >
+                <Header title="Search Album" style={{}} onPress={() => { props.navigation.goBack() }} />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ width: "90%", marginVertical: HP(5) }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {/* <TextInput onFocus={()=>{}}/> */}
+                            <AppTextInput onFocus={() => { setChng(true) }} style={{ width: "100%" }} value={keyword} placeholderText={"Enter Keywords"} onChange={(e) => { setKeyword(e) }} />
+                            <TouchableOpacity onPress={() => { onSearch() }} style={{ position: 'absolute', right: 0, paddingHorizontal: WP(5), top: 0, paddingVertical: HP(4) }}>
+                                <Text style={{ ...styles.emailTxt, }}>Search</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {chng &&
+                            <View>
+                                            <Text style={{ ...styles.emailTxt,letterSpacing:0,fontSize:15}}>Suggested Albums:</Text>
+                                <FlatList
+                                    numColumns={1}
+                                    data={allAlbum}
+                                    // style={{}}
+                                    // showsHorizontalScrollIndicator={false}
+                                    keyExtractor={item => item.id}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity onPress={() => { setAlbum(item); setChng(false) }} style={{  paddingVertical: HP(.5) }}>
+                                            <Text style={{ ...styles.emailTxt, textAlign: 'center' }}>{item?.keyword}</Text>
+                                        </TouchableOpacity>
+
+                                    }
+                                />
+                            </View>
+                        }
+                        <TouchableOpacity onPress={() => { album?.albumName ? onBrowse() : toastPrompt("Search Album First") }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5), backgroundColor: palette.lighBlueBtnTitle, alignSelf: 'center', marginTop: HP(2) }}>
+                            <IconFoundation name='upload' color={"#fff"} size={22} />
+                            <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: "#fff", textAlign: 'center' }}>Upload Images
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={{ ...styles.emailTxt, fontSize: 15, color: "black", marginVertical: HP(3) }}>{album?.albumName}</Text>
+                        <FlatList
+                            numColumns={3}
+                            data={imgs}
+                            style={{ marginBottom: HP(2) }}
+                            // showsHorizontalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) =>
+                                <Image source={{ uri: item?.uri }} style={{ ...styles.img, marginRight: WP(5), marginTop: HP(1) }} />
+                            }
+                        />
+                        <FlatList
+                            numColumns={3}
+                            data={album?.imgs}
+                            style={{}}
+                            // showsHorizontalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) =>
+                                <Image source={{ uri: item }} style={{ ...styles.img, marginRight: WP(5), marginTop: HP(1) }} />
+                            }
+                        />
+                        <TouchableOpacity onPress={() => { onAddPic() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(25), backgroundColor: colors.primary, alignSelf: "center", marginTop: HP(2) }}>
+                            <Text style={{ ...styles.emailTxt, fontSize: 16, color: "#fff", textAlign: 'center' }}>Save
+                            </Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => { album?.albumName ? onBrowse() : toastPrompt("Search Album First") }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(5), backgroundColor: palette.lighBlueBtnTitle, alignSelf: 'center', marginTop: HP(2) }}>
-                        <IconFoundation name='upload' color={"#fff"} size={22} />
-                        <Text style={{ ...styles.emailTxt, paddingLeft: WP(3), fontSize: 16, color: "#fff", textAlign: 'center' }}>Upload Images
-                        </Text>
-                    </TouchableOpacity>
-                    <Text style={{ ...styles.emailTxt, fontSize: 15, color: "black", marginVertical: HP(3) }}>{album?.albumName}</Text>
-                    <FlatList
-                        numColumns={3}
-                        data={imgs}
-                        style={{ marginBottom: HP(2) }}
-                        // showsHorizontalScrollIndicator={false}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) =>
-                            <Image source={{ uri: item?.uri }} style={{ ...styles.img, marginRight: WP(5), marginTop: HP(1) }} />
-                        }
-                    />
-                    <FlatList
-                        numColumns={3}
-                        data={album?.imgs}
-                        style={{}}
-                        // showsHorizontalScrollIndicator={false}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) =>
-                            <Image source={{ uri: item }} style={{ ...styles.img, marginRight: WP(5), marginTop: HP(1) }} />
-                        }
-                    />
-                    <TouchableOpacity onPress={() => { onAddPic() }} style={{ ...styles.row, paddingVertical: HP(2), paddingHorizontal: WP(25), backgroundColor: colors.primary, alignSelf: "center", marginTop: HP(2) }}>
-                        <Text style={{ ...styles.emailTxt, fontSize: 16, color: "#fff", textAlign: 'center' }}>Save
-                        </Text>
-                    </TouchableOpacity>
                 </View>
-            </View>
-            {active &&
-                <View style={{ width: '100%', height: "100%", backgroundColor: 'transparent', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', position: 'absolute', }}>
-                    <ActivityIndicator size={"large"} color="#00ff00" />
-                </View>
-            }
-        </ScrollView>
-    </SafeAreaView>
-)
+                {active &&
+                    <View style={{ width: '100%', height: "100%", backgroundColor: 'transparent', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', position: 'absolute', }}>
+                        <ActivityIndicator size={"large"} color="#00ff00" />
+                    </View>
+                }
+            </ScrollView>
+        </SafeAreaView>
+    )
 }
 const mapStateToProps = (state) => {
     const { backgroundColor } = state;
