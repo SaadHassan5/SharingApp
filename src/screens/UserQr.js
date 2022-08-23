@@ -55,7 +55,7 @@ const UserQr = (props) => {
         try {
             const result = await Share.share({
                 message:
-                    'https://sharingapp.page.link/' + replaceFunc(email, " ", "-") + '/'
+                    'https://sharingapppagelink.netlify.app/' + replaceFunc(email, " ", "-") + '/'
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
@@ -72,7 +72,7 @@ const UserQr = (props) => {
     }
     const onShareWhatsapp = async () => {
         // let url = 'whatsapp://send?text=' + "https://sharingapp.page.link/moonshot/";
-        let url = 'whatsapp://send?text=' + 'https://sharingapp.page.link/' + replaceFunc(email, " ", "-") + '/';
+        let url = 'whatsapp://send?text=' + 'https://sharingapppagelink.netlify.app/' + replaceFunc(email, " ", "-") + '/';
         Linking.openURL(url)
     }
     async function onBrowse() {
